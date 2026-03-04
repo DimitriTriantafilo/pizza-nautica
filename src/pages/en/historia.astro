@@ -1,0 +1,39 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import { useTranslations } from "../../i18n/utils";
+import story1 from "../../assets/images/local/local-1-placeholder.svg";
+import story2 from "../../assets/images/local/local-2-placeholder.svg";
+
+const t = useTranslations("en");
+---
+
+<Layout
+  lang="en"
+  title="Pizza Nautica | Our Story"
+  description="Discover Pizza Nautica's story and tradition in San Fernando, Buenos Aires."
+  canonicalPath="/en/historia"
+>
+  <section class="container-shell py-16">
+    <h1 class="mb-4 text-4xl font-bold">{t("history.title")}</h1>
+    <p class="mb-12 max-w-3xl text-white/80">{t("history.subtitle")}</p>
+
+    <div class="grid gap-8 md:grid-cols-2">
+      <Image src={story1} alt="Restaurant beginnings" class="w-full rounded-2xl grayscale" />
+      <article class="section-card p-6">
+        <p class="leading-relaxed text-white/85">
+          We started with a simple idea: combine Italian tradition, quality ingredients, and the unique
+          character of San Fernando. Over time, our oven became a meeting point for families, friends, and
+          artisan pizza lovers.
+        </p>
+      </article>
+      <article class="section-card p-6">
+        <p class="leading-relaxed text-white/85">
+          Every recipe keeps a classic technique with a modern point of view. Dough is handled patiently,
+          tomato sauce is cooked at the right moment, and each combination seeks balance and true flavor.
+        </p>
+      </article>
+      <Image src={story2} alt="Pizza tradition" class="w-full rounded-2xl grayscale" />
+    </div>
+  </section>
+</Layout>

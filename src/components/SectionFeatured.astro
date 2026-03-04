@@ -1,0 +1,40 @@
+---
+import { Image } from "astro:assets";
+import featuredDish from "../assets/images/platos/pizza-featured-placeholder.svg";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="relative z-20 bg-[var(--warm-ivory)] px-4 py-24">
+  <div class="container-shell">
+    <h2 class="mb-8 text-center font-[var(--font-display)] text-4xl font-bold text-[var(--charcoal)] md:text-5xl">
+      {t("home.featured.title")}
+    </h2>
+
+    <div class="mx-auto flex max-w-[1200px] items-stretch overflow-hidden rounded-2xl shadow-nautica-lg">
+      <div class="hidden w-12 bg-[var(--charcoal)] md:block lg:w-20"></div>
+      <div class="relative flex-1 bg-[linear-gradient(135deg,#bd3026_0%,#b84a39_55%,#d8b46a_100%)] p-3 md:p-6">
+        <Image
+          src={featuredDish}
+          alt={lang === "es" ? "Pizza promocional destacada del menú" : "Featured promotional pizza from the menu"}
+          class="warm-img h-full w-full rounded-xl object-cover mix-blend-multiply opacity-90 aspect-[16/9]"
+          widths={[800, 1280, 1920]}
+          sizes="(min-width: 1200px) 1040px, 100vw"
+          loading="lazy"
+        />
+        <div class="absolute -bottom-6 left-1/2 -translate-x-1/2">
+          <a href={`/${lang}/menu`} class="btn-secondary whitespace-nowrap">
+            {t("home.featured.cta")}
+          </a>
+        </div>
+      </div>
+      <div class="hidden w-12 bg-[var(--charcoal)] md:block lg:w-20"></div>
+    </div>
+  </div>
+</section>

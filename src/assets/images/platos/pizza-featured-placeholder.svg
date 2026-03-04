@@ -1,0 +1,11 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g2" x1="120" y1="90" x2="1080" y2="810" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#BD3026"/>
+      <stop offset="1" stop-color="#E0D583"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="#1A1A1A"/>
+  <rect x="120" y="90" width="960" height="720" rx="30" fill="url(#g2)"/>
+  <text x="600" y="470" text-anchor="middle" fill="#1A1A1A" font-size="54" font-family="Arial, sans-serif">Featured Dish Placeholder</text>
+</svg>

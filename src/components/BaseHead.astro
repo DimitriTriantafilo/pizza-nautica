@@ -1,0 +1,55 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  lang: "es" | "en";
+  canonicalPath: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description,
+  lang,
+  canonicalPath,
+  ogImage = "/og-default.svg",
+} = Astro.props;
+
+const site = Astro.site ?? new URL("https://pizzanautica.com");
+const canonical = new URL(canonicalPath, site).toString();
+const ogImageUrl = new URL(ogImage, site).toString();
+const siteName = lang === "es" ? "Pizzería Náutica" : "Pizza Nautica";
+const locale = lang === "es" ? "es_AR" : "en_US";
+const alternateLocale = lang === "es" ? "en_US" : "es_AR";
+
+const alternateEs = new URL(canonicalPath.replace(/^\/(es|en)/, "/es"), site).toString();
+const alternateEn = new URL(canonicalPath.replace(/^\/(es|en)/, "/en"), site).toString();
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#171717" />
+<meta name="generator" content={Astro.generator} />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang="es" href={alternateEs} />
+<link rel="alternate" hreflang="en" href={alternateEn} />
+<link rel="alternate" hreflang="x-default" href={alternateEs} />
+
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content={locale} />
+<meta property="og:locale:alternate" content={alternateLocale} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />

@@ -1,0 +1,7 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#1A1A1A"/>
+  <circle cx="220" cy="120" r="180" fill="#BD3026" fill-opacity="0.7"/>
+  <circle cx="1040" cy="520" r="220" fill="#E0D583" fill-opacity="0.65"/>
+  <text x="600" y="300" text-anchor="middle" fill="#FFFFFF" font-size="78" font-family="Arial, sans-serif">Pizzería Náutica</text>
+  <text x="600" y="380" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85" font-size="34" font-family="Arial, sans-serif">Sabor tradicional junto al río</text>
+</svg>

@@ -1,0 +1,224 @@
+---
+import LanguageToggle from "./LanguageToggle.astro";
+import { useTranslations } from "../i18n/utils";
+import whiteLogo from "../assets/images/logo/white-logo.png";
+import { Image } from "astro:assets";
+
+interface Props {
+  lang: "es" | "en";
+  currentPath: string;
+}
+
+const { lang, currentPath } = Astro.props;
+const t = useTranslations(lang);
+const homePath = `/${lang}/`;
+const historyPath = `/${lang}/historia`;
+const menuPath = `/${lang}/menu`;
+const isActive = (path: string) => currentPath === path || (path.endsWith("/") && currentPath === path.slice(0, -1));
+---
+
+<header id="site-header" class="site-header fixed top-0 z-50 w-full border-b border-transparent bg-transparent">
+  <nav class="site-nav container-shell flex flex-row md:flex-row-reverse items-center justify-between gap-3 text-[var(--warm-ivory)]">
+    <button
+      id="mobile-menu-toggle"
+      type="button"
+      class="order-1 rounded-md border border-white/20 p-2 md:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu-panel"
+      aria-label={t("nav.openMenu")}
+      data-open-label={t("nav.openMenu")}
+      data-close-label={t("nav.closeMenu")}
+    >
+      <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z"></path>
+      </svg>
+    </button>
+
+    <a class="order-2 flex items-center gap-2 text-sm font-semibold md:order-1" href={homePath}>
+      <Image
+        src={whiteLogo}
+        alt="Pizza Nautica"
+        width={40}
+        height={40}
+        class="h-auto w-8 object-contain md:w-10"
+      />
+      <span class="text-[var(--warm-ivory)]">{t("site.name")}</span>
+    </a>
+
+    <div class="hidden items-center gap-5 text-sm md:flex">
+      <a
+        href={homePath}
+        class:list={[
+          "transition-premium hover:text-[var(--nautica-yellow)]",
+          isActive(homePath) && "text-[var(--nautica-red)]",
+        ]}
+      >
+        {t("nav.home")}
+      </a>
+      <a
+        href={historyPath}
+        class:list={[
+          "transition-premium hover:text-[var(--nautica-yellow)]",
+          isActive(historyPath) && "text-[var(--nautica-red)]",
+        ]}
+      >
+        {t("nav.history")}
+      </a>
+      <a
+        href={menuPath}
+        class:list={[
+          "transition-premium hover:text-[var(--nautica-yellow)]",
+          isActive(menuPath) && "text-[var(--nautica-red)]",
+        ]}
+      >
+        {t("nav.menu")}
+      </a>
+      <a
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="transition-premium hover:text-[var(--nautica-yellow)]"
+      >
+        {t("nav.bookings")}
+      </a>
+      <LanguageToggle lang={lang} currentPath={currentPath} />
+    </div>
+  </nav>
+
+  <div id="mobile-menu-panel" class="hidden border-t border-white/10 bg-[var(--charcoal)] text-[var(--warm-ivory)] md:hidden">
+    <div class="container-shell flex flex-col gap-4 py-4 text-sm">
+      <a data-mobile-link href={homePath} class="transition-premium hover:text-[var(--nautica-yellow)]">{t("nav.home")}</a>
+      <a data-mobile-link href={historyPath} class="transition-premium hover:text-[var(--nautica-yellow)]">{t("nav.history")}</a>
+      <a data-mobile-link href={menuPath} class="transition-premium hover:text-[var(--nautica-yellow)]">{t("nav.menu")}</a>
+      <a
+        data-mobile-link
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex w-fit rounded-full bg-[var(--nautica-red)] px-4 py-2 font-semibold text-white transition-premium hover:bg-[var(--nautica-red-dark)]"
+      >
+        {t("nav.bookings")}
+      </a>
+      <div class="flex justify-start">
+        <LanguageToggle lang={lang} currentPath={currentPath} />
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById("site-header");
+  const menuToggle = document.getElementById("mobile-menu-toggle");
+  const mobilePanel = document.getElementById("mobile-menu-panel");
+  const mobileLinks = document.querySelectorAll("[data-mobile-link]");
+
+  let menuOpen = false;
+  let forceExpanded = false;
+  let lastScrollY = window.scrollY;
+  const maxHeight = 64;
+  const collapseDistance = 180;
+   // En desktop la barra comienza oculta hasta que el usuario interactúa
+  let startHidden = window.innerWidth >= 768;
+
+  const updateHeaderHeight = () => {
+    if (!header) return;
+    // En móvil mantenemos siempre visible el topbar
+    if (window.innerWidth < 768) {
+      header.style.setProperty("--nav-height", `${maxHeight}px`);
+      header.classList.remove("navbar-hidden");
+      header.classList.add("navbar-compact");
+      return;
+    }
+
+    // Estado inicial: barra oculta hasta que el usuario scrollea o pasa el mouse por arriba
+    if (startHidden && !menuOpen && !forceExpanded) {
+      header.style.setProperty("--nav-height", "0px");
+      header.classList.add("navbar-hidden");
+      header.classList.remove("navbar-compact");
+      return;
+    }
+
+    if (menuOpen || forceExpanded) {
+      header.style.setProperty("--nav-height", `${maxHeight}px`);
+      header.classList.remove("navbar-hidden");
+      header.classList.add("navbar-compact");
+      return;
+    }
+
+    const progress = Math.min(window.scrollY / collapseDistance, 1);
+    const nextHeight = Math.max(0, maxHeight * (1 - progress));
+    header.style.setProperty("--nav-height", `${nextHeight}px`);
+    header.classList.toggle("navbar-hidden", nextHeight <= 1);
+    header.classList.toggle("navbar-compact", nextHeight > 1);
+  };
+
+  const updateMenuState = (expanded) => {
+    if (!menuToggle || !mobilePanel) return;
+    menuOpen = expanded;
+    menuToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+    menuToggle.setAttribute(
+      "aria-label",
+      expanded ? menuToggle.dataset.closeLabel ?? "Close menu" : menuToggle.dataset.openLabel ?? "Open menu",
+    );
+    mobilePanel.classList.toggle("hidden", !expanded);
+    document.body.style.overflow = expanded ? "hidden" : "";
+    updateHeaderHeight();
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      const currentY = window.scrollY;
+
+      // Al subir, el topbar vuelve completo sin importar la posición.
+      if (currentY < lastScrollY) {
+        forceExpanded = true;
+        startHidden = false;
+      } else if (currentY > lastScrollY) {
+        // Solo al bajar permitimos que se vuelva a achicar.
+        forceExpanded = false;
+      }
+
+      lastScrollY = currentY;
+      updateHeaderHeight();
+    },
+    { passive: true },
+  );
+
+  window.addEventListener("mousemove", (event) => {
+    if (event.clientY <= 20) {
+      // Se expande al acercar el mouse arriba y queda así
+      // hasta que el usuario vuelva a scrollear hacia abajo.
+      if (!forceExpanded) {
+        forceExpanded = true;
+      }
+      startHidden = false;
+      updateHeaderHeight();
+    }
+  });
+
+  menuToggle?.addEventListener("click", () => {
+    updateMenuState(!menuOpen);
+  });
+
+  mobileLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      updateMenuState(false);
+    });
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      updateMenuState(false);
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768) {
+      updateMenuState(false);
+    }
+    updateHeaderHeight();
+  });
+
+  updateHeaderHeight();
+</script>

@@ -1,0 +1,52 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import MenuCard from "../../components/MenuCard.astro";
+import { menuCategories } from "../../data/menu";
+import { useTranslations } from "../../i18n/utils";
+import menuA from "../../assets/images/platos/pizza-1-placeholder.svg";
+import menuB from "../../assets/images/platos/pizza-2-placeholder.svg";
+import menuC from "../../assets/images/platos/pizza-featured-placeholder.svg";
+
+const t = useTranslations("es");
+const menuPriceUrl = "#";
+const categoryNames = {
+  classics: t("menu.classic"),
+  specials: t("menu.special"),
+  drinks: t("menu.drinks"),
+} as const;
+const images = [menuA, menuB, menuC];
+---
+
+<Layout
+  lang="es"
+  title="Pizzería Náutica | Menú"
+  description="Explora el menú informativo de Pizzería Náutica: clásicas, especiales y bebidas."
+  canonicalPath="/es/menu"
+>
+  <section class="container-shell py-16">
+    <h1 class="mb-3 text-4xl font-bold">{t("menu.title")}</h1>
+    <p class="mb-8 max-w-2xl text-white/80">{t("menu.subtitle")}</p>
+    <a href={menuPriceUrl} target="_blank" rel="noopener noreferrer" class="btn-primary mb-12">
+      {t("menu.cta")}
+    </a>
+
+    <div class="space-y-12">
+      {
+        menuCategories.map((category, categoryIndex) => (
+          <section>
+            <h2 class="mb-5 text-2xl font-semibold">{categoryNames[category.id]}</h2>
+            <div class="grid gap-6 md:grid-cols-2">
+              {category.items.es.map((item, itemIndex) => (
+                <MenuCard
+                  name={item.name}
+                  description={item.description}
+                  image={images[(categoryIndex + itemIndex) % images.length]}
+                />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,78 @@
+---
+import { Image } from "astro:assets";
+import local1 from "../assets/images/local/local-1-placeholder.svg";
+import local2 from "../assets/images/local/local-2-placeholder.svg";
+import pizza1 from "../assets/images/platos/pizza-1-placeholder.svg";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="relative z-20 bg-[var(--cream-1)] text-[var(--nautica-red)] py-24">
+  <div class="container-shell px-4 pb-10 pt-6 md:px-4">
+    <h2 class="text-center font-[var(--font-display)] text-[1.9rem] leading-tight text-[var(--charcoal)] md:text-[2.25rem]">
+      {lang === "es" ? (
+        <>
+          <span class="text-[var(--nautica-red)]">30 años</span> en el corazon de San Fernando
+        </>
+      ) : (
+        <>
+          <span class="text-[var(--nautica-red)]">30 years</span> in the heart of San Fernando
+        </>
+      )}
+    </h2>
+
+    <div class="mx-auto mt-10 grid max-w-[1200px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <article class="card-hover rounded-[12px] bg-[var(--slate)] p-9 text-center shadow-nautica-lg">
+        <Image
+          src={local1}
+          alt={lang === "es" ? "Interior principal del salón de la pizzería" : "Main dining room interior of the pizzeria"}
+          class="mx-auto mb-5 h-36 w-36 rounded-full object-cover outline-3 outline-[var(--nautica-yellow)] warm-img md:h-40 md:w-40"
+          widths={[320, 480, 640]}
+          sizes="160px"
+          loading="lazy"
+        />
+        <h3 class="font-[var(--font-body)] text-lg font-semibold text-[var(--warm-ivory)] md:text-xl">
+          {lang === "es" ? "Nuestro salón" : "Our dining room"}
+        </h3>
+      </article>
+
+      <article class="card-hover rounded-[12px] bg-[var(--slate)] p-9 text-center shadow-nautica-lg">
+        <Image
+          src={pizza1}
+          alt={lang === "es" ? "Pizza artesanal recién horneada" : "Freshly baked artisan pizza"}
+          class="mx-auto mb-5 h-36 w-36 rounded-full object-cover outline-3 outline-[var(--nautica-yellow)] warm-img md:h-40 md:w-40"
+          widths={[320, 480, 640]}
+          sizes="160px"
+          loading="lazy"
+        />
+        <h3 class="font-[var(--font-body)] text-lg font-semibold text-[var(--warm-ivory)] md:text-xl">
+          {lang === "es" ? "Tradicion artesanal" : "Artisan tradition"}
+        </h3>
+      </article>
+
+      <article class="card-hover rounded-[12px] bg-[var(--slate)] p-9 text-center shadow-nautica-lg">
+        <Image
+          src={local2}
+          alt={lang === "es" ? "Ambiente cálido del restaurante" : "Warm restaurant atmosphere"}
+          class="mx-auto mb-5 h-36 w-36 rounded-full object-cover outline-3 outline-[var(--nautica-yellow)] warm-img md:h-40 md:w-40"
+          widths={[320, 480, 640]}
+          sizes="160px"
+          loading="lazy"
+        />
+        <h3 class="font-[var(--font-body)] text-lg font-semibold text-[var(--warm-ivory)] md:text-xl">
+          {lang === "es" ? "Experiencia Nautica" : "Nautica experience"}
+        </h3>
+      </article>
+    </div>
+
+    <div class="mt-10 flex justify-center">
+      <a href={`/${lang}/historia`} class="btn-primary">{t("hero.ctaHistory")}</a>
+    </div>
+  </div>
+</section>

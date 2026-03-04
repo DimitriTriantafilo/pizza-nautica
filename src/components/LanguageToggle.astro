@@ -1,0 +1,21 @@
+---
+interface Props {
+  lang: "es" | "en";
+  currentPath: string;
+}
+
+const { lang, currentPath } = Astro.props;
+const nextLang = lang === "es" ? "en" : "es";
+const pathWithoutLocale = currentPath.replace(/^\/(es|en)/, "") || "/";
+const switchHref = nextLang === "es" ? `/es${pathWithoutLocale}` : `/en${pathWithoutLocale}`;
+const ariaLabel =
+  lang === "es" ? `Cambiar idioma a ${nextLang.toUpperCase()}` : `Switch language to ${nextLang.toUpperCase()}`;
+---
+
+<a
+  href={switchHref}
+  class="inline-flex w-fit rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide hover:border-[var(--nautica-yellow)] hover:text-[var(--nautica-yellow)]"
+  aria-label={ariaLabel}
+>
+  {nextLang.toUpperCase()}
+</a>

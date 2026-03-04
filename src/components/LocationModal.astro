@@ -1,0 +1,55 @@
+---
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+  lang: "es" | "en";
+  modalId?: string;
+}
+
+const { lang, modalId = "location-modal" } = Astro.props;
+const t = useTranslations(lang);
+const mapsExternalUrl = "https://maps.app.goo.gl/qvi9BgovTJ9QLqdF6";
+const mapsEmbedUrl =
+  "https://www.google.com/maps?q=Doctor+San+Gines+801,+B1646DDQ+San+Fernando,+Buenos+Aires&output=embed";
+---
+
+<div id={modalId} class="fixed inset-0 z-[70] hidden">
+  <button
+    type="button"
+    data-close-location-modal
+    class="absolute inset-0 h-full w-full bg-black/70"
+    aria-label={t("location.close")}
+  ></button>
+
+  <div class="section-card absolute left-1/2 top-1/2 z-[71] w-[min(92vw,780px)] -translate-x-1/2 -translate-y-1/2 bg-zinc-900 p-4 shadow-2xl">
+    <div class="mb-3 flex items-center justify-between gap-3">
+      <h2 class="text-xl font-semibold">{t("location.title")}</h2>
+      <button
+        type="button"
+        data-close-location-modal
+        class="rounded-full border border-white/30 px-3 py-1 text-sm hover:border-[var(--nautica-yellow)]"
+      >
+        {t("location.close")}
+      </button>
+    </div>
+    <p class="mb-4 text-sm text-white/80">{t("location.address")}</p>
+    <div class="overflow-hidden rounded-xl border border-white/10">
+      <iframe
+        title="Google Maps"
+        src={mapsEmbedUrl}
+        width="100%"
+        height="340"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+    <a
+      href={mapsExternalUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-primary mt-4"
+    >
+      {t("location.cta")}
+    </a>
+  </div>
+</div>

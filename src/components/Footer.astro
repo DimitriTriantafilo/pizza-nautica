@@ -1,0 +1,66 @@
+---
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<footer class="bg-[var(--charcoal)]">
+  <div class="container-shell py-14">
+      <div class="grid gap-10 md:grid-cols-3">
+        <section>
+          <h3 class="font-[var(--font-display)] text-2xl text-[var(--warm-ivory)]">
+            {lang === "es" ? "Ubicacion y Horarios" : "Location & Hours"}
+          </h3>
+          <p class="mt-4 text-sm text-[var(--warm-ivory)]/85">{t("location.address")}</p>
+          <ul class="mt-4 space-y-2 text-sm text-[var(--warm-ivory)]/85">
+            <li>{lang === "es" ? "Lunes a Jueves: 19:00 - 00:00" : "Monday to Thursday: 7:00 PM - 12:00 AM"}</li>
+            <li>{lang === "es" ? "Viernes a Domingo: 19:00 - 01:00" : "Friday to Sunday: 7:00 PM - 1:00 AM"}</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3 class="font-[var(--font-display)] text-2xl text-[var(--warm-ivory)]">
+            {lang === "es" ? "Redes Sociales" : "Social"}
+          </h3>
+          <div class="mt-4 flex flex-col gap-2 text-sm">
+            <a href="#" class="text-[var(--nautica-yellow)] transition-premium hover:text-[var(--nautica-red)]">Instagram</a>
+            <a href="#" class="text-[var(--nautica-yellow)] transition-premium hover:text-[var(--nautica-red)]">Facebook</a>
+            <a href="https://wa.me/541147255050" target="_blank" rel="noopener noreferrer" class="text-[var(--nautica-yellow)] transition-premium hover:text-[var(--nautica-red)]">
+              WhatsApp
+            </a>
+          </div>
+        </section>
+
+        <section>
+          <h3 class="font-[var(--font-display)] text-2xl text-[var(--warm-ivory)]">
+            {lang === "es" ? "Contacto" : "Contact"}
+          </h3>
+          <p class="mt-4 text-sm text-[var(--warm-ivory)]/85">
+            {lang === "es" ? "Reservas y consultas por nuestros canales oficiales." : "Bookings and inquiries through our official channels."}
+          </p>
+          <div class="mt-4 flex flex-col gap-2 text-sm">
+            <a
+              href="https://maps.app.goo.gl/qvi9BgovTJ9QLqdF6"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-[var(--nautica-yellow)] transition-premium hover:text-[var(--nautica-red)]"
+            >
+              {lang === "es" ? "Ver mapa" : "View map"}
+            </a>
+            <a href="tel:+541147255050" class="text-[var(--nautica-yellow)] transition-premium hover:text-[var(--nautica-red)]">
+              +54 11 4725-5050
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div class="mt-10 border-t border-[var(--warm-ivory)]/20 pt-6 text-center text-sm text-[var(--warm-ivory)]/70">
+        © {new Date().getFullYear()} {t("site.name")}. {t("footer.copy")}
+      </div>
+  </div>
+</footer>

@@ -1,0 +1,49 @@
+---
+import { Image } from "astro:assets";
+import { useTranslations } from "../i18n/utils";
+import heroImage from "../assets/images/hero/hero-placeholder.jpg";
+import whiteLogo from "../assets/images/logo/white-logo.png";
+
+interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="relative min-h-screen overflow-hidden">
+  <Image
+    src={heroImage}
+    alt={t("site.name")}
+    class="fixed inset-0 h-screen w-full object-cover"
+    widths={[640, 1280, 1920]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+    priority
+  />
+  <div class="fixed inset-0 bg-black/50"></div>
+
+  <div class="container-shell relative z-10 flex min-h-screen flex-col justify-between py-6 pb-12 pt-24 text-left md:pb-16 md:pt-28">
+    <div>
+      <Image
+        src={whiteLogo}
+        alt="Pizza Nautica"
+        width={140}
+        height={140}
+        class="h-auto w-24 object-contain md:w-32"
+      />
+    </div>
+
+    <div>
+      <h1 class="font-[var(--font-display)] text-[2.5rem] font-bold leading-[1.08] tracking-widest text-white md:text-[4rem]">
+        Pizza Nautica
+      </h1>
+      <p class="mt-2 font-[var(--font-body)] text-sm font-medium uppercase tracking-[0.14em] text-white/80 md:text-base">
+        {t("site.lema")}
+      </p>
+    </div>
+  </div>
+</section>

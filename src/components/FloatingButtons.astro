@@ -1,0 +1,140 @@
+---
+import LocationModal from "./LocationModal.astro";
+import { useTranslations } from "../i18n/utils";
+import whatsappQr from "../assets/images/whatsapp/Pizza_Náutica-1024.png";
+
+interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const whatsappNumber = "541147255050";
+const whatsappUrl = `https://wa.me/${whatsappNumber}`;
+---
+
+<div class="fixed bottom-6 right-6 z-60 flex flex-col gap-3">
+  <button
+    type="button"
+    id="open-location-modal"
+    class="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--nautica-red)] shadow-lg transition hover:scale-105"
+    aria-label={t("floating.location")}
+  >
+    <svg viewBox="0 0 24 24" class="h-6 w-6 fill-white" aria-hidden="true">
+      <path d="M12 2a7 7 0 0 0-7 7c0 5.22 7 13 7 13s7-7.78 7-13a7 7 0 0 0-7-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"></path>
+    </svg>
+  </button>
+
+  <button
+    type="button"
+    id="whatsapp-btn"
+    class="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition hover:scale-105"
+    aria-label={t("floating.whatsapp")}
+    data-whatsapp-url={whatsappUrl}
+  >
+    <svg viewBox="0 0 32 32" class="h-6 w-6 fill-white" aria-hidden="true">
+      <path
+        d="M19.11 17.35c-.27-.14-1.59-.79-1.84-.88-.24-.09-.42-.14-.6.14-.18.27-.69.88-.85 1.06-.15.18-.31.2-.58.07-.27-.14-1.12-.41-2.14-1.31-.79-.7-1.33-1.57-1.49-1.84-.15-.27-.02-.41.11-.54.12-.12.27-.31.4-.46.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.47-.07-.14-.6-1.44-.82-1.98-.22-.52-.44-.45-.6-.46h-.52c-.18 0-.47.07-.71.34-.24.27-.93.91-.93 2.22s.95 2.57 1.08 2.74c.14.18 1.87 2.85 4.52 4 .63.27 1.11.43 1.49.55.63.2 1.2.17 1.65.1.5-.07 1.59-.65 1.82-1.27.22-.63.22-1.17.15-1.27-.06-.1-.24-.16-.51-.29Zm-3.04 10.89h-.01a12.8 12.8 0 0 1-6.52-1.79l-.47-.28-4.84 1.27 1.29-4.72-.31-.48a12.8 12.8 0 0 1-1.97-6.8c0-7.08 5.76-12.84 12.85-12.84 3.43 0 6.65 1.34 9.07 3.76a12.75 12.75 0 0 1 3.77 9.08c0 7.08-5.76 12.84-12.86 12.84Zm10.9-23.75A15.25 15.25 0 0 0 16.12 0C7.73 0 .9 6.83.9 15.22c0 2.68.7 5.29 2.03 7.59L.76 31l8.39-2.2a15.17 15.17 0 0 0 6.95 1.67h.01c8.39 0 15.22-6.83 15.22-15.22 0-4.07-1.58-7.89-4.46-10.76Z"
+      ></path>
+    </svg>
+  </button>
+</div>
+
+<!-- WhatsApp QR Modal (desktop only) -->
+<div id="whatsapp-modal" class="fixed inset-0 z-[70] hidden">
+  <button
+    type="button"
+    data-close-whatsapp-modal
+    class="absolute inset-0 h-full w-full bg-black/70"
+    aria-label={t("whatsapp.close")}
+  ></button>
+
+  <div class="absolute left-1/2 top-1/2 z-[71] w-[min(90vw,380px)] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 text-center shadow-2xl">
+    <button
+      type="button"
+      data-close-whatsapp-modal
+      class="absolute right-4 top-4 text-zinc-400 transition hover:text-zinc-700"
+      aria-label={t("whatsapp.close")}
+    >
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <h3 class="mb-4 text-lg font-bold text-[var(--nautica-dark)]">
+      {t("whatsapp.title")}
+    </h3>
+
+    <div class="mx-auto mb-4 w-fit rounded-xl border-4 border-[var(--nautica-yellow)] p-2">
+      <img
+        src={whatsappQr.src}
+        alt="WhatsApp QR"
+        width="220"
+        height="220"
+        loading="lazy"
+        class="block"
+      />
+    </div>
+
+    <p class="mb-5 text-sm text-zinc-500">
+      {t("whatsapp.text")}
+    </p>
+
+    <a
+      href={whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-2 rounded-full bg-[var(--nautica-red)] px-6 py-3 font-semibold text-white transition hover:opacity-90"
+    >
+      <svg viewBox="0 0 32 32" class="h-5 w-5 fill-white" aria-hidden="true">
+        <path
+          d="M19.11 17.35c-.27-.14-1.59-.79-1.84-.88-.24-.09-.42-.14-.6.14-.18.27-.69.88-.85 1.06-.15.18-.31.2-.58.07-.27-.14-1.12-.41-2.14-1.31-.79-.7-1.33-1.57-1.49-1.84-.15-.27-.02-.41.11-.54.12-.12.27-.31.4-.46.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.47-.07-.14-.6-1.44-.82-1.98-.22-.52-.44-.45-.6-.46h-.52c-.18 0-.47.07-.71.34-.24.27-.93.91-.93 2.22s.95 2.57 1.08 2.74c.14.18 1.87 2.85 4.52 4 .63.27 1.11.43 1.49.55.63.2 1.2.17 1.65.1.5-.07 1.59-.65 1.82-1.27.22-.63.22-1.17.15-1.27-.06-.1-.24-.16-.51-.29Zm-3.04 10.89h-.01a12.8 12.8 0 0 1-6.52-1.79l-.47-.28-4.84 1.27 1.29-4.72-.31-.48a12.8 12.8 0 0 1-1.97-6.8c0-7.08 5.76-12.84 12.85-12.84 3.43 0 6.65 1.34 9.07 3.76a12.75 12.75 0 0 1 3.77 9.08c0 7.08-5.76 12.84-12.86 12.84Zm10.9-23.75A15.25 15.25 0 0 0 16.12 0C7.73 0 .9 6.83.9 15.22c0 2.68.7 5.29 2.03 7.59L.76 31l8.39-2.2a15.17 15.17 0 0 0 6.95 1.67h.01c8.39 0 15.22-6.83 15.22-15.22 0-4.07-1.58-7.89-4.46-10.76Z"
+        ></path>
+      </svg>
+      {t("whatsapp.cta")}
+    </a>
+  </div>
+</div>
+
+<LocationModal lang={lang} />
+
+<script>
+  const isMobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+
+  const whatsappBtn = document.getElementById("whatsapp-btn") as HTMLButtonElement;
+  const whatsappModal = document.getElementById("whatsapp-modal");
+  const whatsappUrl = whatsappBtn?.dataset.whatsappUrl || "";
+
+  whatsappBtn?.addEventListener("click", () => {
+    if (isMobile) {
+      window.open(whatsappUrl, "_blank");
+    } else {
+      whatsappModal?.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+  });
+
+  document.querySelectorAll("[data-close-whatsapp-modal]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      whatsappModal?.classList.add("hidden");
+      document.body.style.overflow = "";
+    });
+  });
+
+  const locationModal = document.getElementById("location-modal");
+  const openLocationBtn = document.getElementById("open-location-modal");
+
+  openLocationBtn?.addEventListener("click", () => {
+    locationModal?.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  });
+
+  document.querySelectorAll("[data-close-location-modal]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      locationModal?.classList.add("hidden");
+      document.body.style.overflow = "";
+    });
+  });
+</script>
