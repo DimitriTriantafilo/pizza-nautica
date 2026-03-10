@@ -3,16 +3,18 @@ import Layout from "../../layouts/Layout.astro";
 import Hero from "../../components/Hero.astro";
 import SectionGlimpse from "../../components/SectionGlimpse.astro";
 import SectionFeatured from "../../components/SectionFeatured.astro";
+import SectionSocial from "../../components/SectionSocial.astro";
 ---
 
 <Layout
   lang="es"
-  title="Pizzería Náutica | Inicio"
-  description="Pizzería Náutica en San Fernando. Tradición, sabor artesanal y una experiencia moderna frente al río."
+  title="Pizza Náutica | Inicio"
+  description="Pizza Náutica en San Fernando. Tradición, sabor artesanal y una experiencia moderna frente al río."
   canonicalPath="/es/"
   isHome={true}
 >
   <Hero lang="es" />
-  <SectionGlimpse lang="es" />
   <SectionFeatured lang="es" />
+  <SectionGlimpse lang="es" />
+  <SectionSocial lang="es" />
 </Layout>

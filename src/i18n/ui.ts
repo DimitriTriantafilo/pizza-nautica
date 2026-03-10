@@ -7,7 +7,7 @@ export const defaultLang = "es";
 
 export const ui = {
   es: {
-    "site.name": "Pizzería Náutica",
+    "site.name": "Pizza Náutica",
     "site.tagline": "Sabor tradicional junto al río.",
     "site.lema": "30 años en el corazon de san fernando",
 

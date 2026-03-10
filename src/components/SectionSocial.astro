@@ -1,0 +1,93 @@
+---
+import { Image } from "astro:assets";
+import tripadvisorLogo from "../assets/images/hero/tripadvisor-logo-vector-01.png";
+
+interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+
+const instagramUrl = "https://www.instagram.com/pizzanautica/";
+const facebookUrl = "https://www.facebook.com/PizzaNautica";
+const tripadvisorUrl =
+  "https://www.tripadvisor.com.ar/Restaurant_Review-g1450244-d8490695-Reviews-Pizza_Nautica-San_Fernando_Province_of_Buenos_Aires_Central_Argentina.html";
+---
+
+<section class="relative z-20 bg-[var(--cream-1)] py-12">
+  <div class="container-shell px-4 md:px-4">
+    <div class="mx-auto max-w-[1200px] border-t border-[var(--charcoal)]/10 pt-8">
+      <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+        <div class="md:w-1/2">
+          <p class="font-[var(--font-display)] text-2xl text-[var(--charcoal)]">
+            {lang === "es" ? "Conoce nuestras redes" : "Follow us"}
+          </p>
+          <div class="mt-4 flex items-center gap-5">
+            <a
+              href={instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram Pizza Nautica"
+              class="opacity-70 transition duration-300 hover:opacity-100 cursor-pointer"
+            >
+              <svg viewBox="0 0 24 24" class="h-7 w-7 fill-[var(--charcoal)]" aria-hidden="true">
+                <path
+                  d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.8A3.95 3.95 0 0 0 3.8 7.75v8.5a3.95 3.95 0 0 0 3.95 3.95h8.5a3.95 3.95 0 0 0 3.95-3.95v-8.5a3.95 3.95 0 0 0-3.95-3.95h-8.5Zm8.94 1.35a1.16 1.16 0 1 1 0 2.32 1.16 1.16 0 0 1 0-2.32ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Z"
+                ></path>
+              </svg>
+            </a>
+
+            <a
+              href={facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook Pizza Nautica"
+              class="opacity-70 transition duration-300 hover:opacity-100 cursor-pointer"
+            >
+              <svg viewBox="0 0 24 24" class="h-7 w-7 fill-[var(--charcoal)]" aria-hidden="true">
+                <path
+                  d="M13.5 22v-8.2h2.76l.42-3.2H13.5V8.57c0-.93.26-1.56 1.6-1.56h1.7V4.15a22.3 22.3 0 0 0-2.48-.13c-2.45 0-4.13 1.5-4.13 4.24v2.36H7.42v3.2h2.77V22h3.31Z"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="md:w-1/2 md:flex md:justify-end">
+          <a
+            href={tripadvisorUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block w-fit rounded-xl border border-[var(--charcoal)]/10 bg-white/70 p-5 cursor-pointer transition duration-300 hover:bg-white/90"
+            aria-label={lang === "es" ? "Ver perfil en TripAdvisor" : "See profile on TripAdvisor"}
+          >
+            <p class="text-sm font-semibold uppercase tracking-wide text-[var(--charcoal)]/70">TripAdvisor</p>
+            <div class="mt-3 flex items-center gap-3">
+              <Image
+                src={tripadvisorLogo}
+                alt="TripAdvisor"
+                class="h-6 w-auto object-contain"
+                widths={[176, 264, 352]}
+                sizes="176px"
+                loading="lazy"
+              />
+              <p class="text-lg font-semibold text-[var(--charcoal)]">4.0 / 5</p>
+            </div>
+
+            <div class="mt-3 flex items-center gap-2" aria-hidden="true">
+              <span class="h-3.5 w-3.5 rounded-full bg-[var(--nautica-red)]"></span>
+              <span class="h-3.5 w-3.5 rounded-full bg-[var(--nautica-red)]"></span>
+              <span class="h-3.5 w-3.5 rounded-full bg-[var(--nautica-red)]"></span>
+              <span class="h-3.5 w-3.5 rounded-full bg-[var(--nautica-red)]"></span>
+              <span class="h-3.5 w-3.5 rounded-full border border-[var(--nautica-red)]/70 bg-transparent"></span>
+            </div>
+
+            <p class="mt-4 text-sm text-[var(--nautica-red)] opacity-80 transition duration-300 hover:opacity-100">
+              {lang === "es" ? "Ver en TripAdvisor" : "See on TripAdvisor"}
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
