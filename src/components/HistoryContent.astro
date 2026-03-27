@@ -1,0 +1,194 @@
+---
+import { useTranslations } from "../i18n/utils";
+import destacada3 from "../assets/images/hero/destacada 3.jpg";
+import destacada4 from "../assets/images/hero/destacada 4.jpg";
+import destacada1 from "../assets/images/hero/destacada1.jpg";
+import destacada2 from "../assets/images/hero/destacada2.jpg";
+import historia1 from "../assets/images/hero/historia 1.jpg";
+import historia2 from "../assets/images/hero/historia 2.jpg";
+import historia3 from "../assets/images/hero/historia 3.jpg";
+import morrones from "../assets/images/hero/morrones.jpg";
+
+interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const isEs = lang === "es";
+
+const quoteEs = `\u201CLa pizza es mucho m\u00E1s que masa y salsa. Es el fuego, la espera, el aroma que llena la sala y la sonrisa de quien la recibe.\u201D`;
+const quoteEn = `\u201CPizza is much more than dough and sauce. It\u2019s the fire, the wait, the aroma that fills the room and the smile of whoever receives it.\u201D`;
+
+const carouselImages = [destacada1, destacada2, destacada3, destacada4, morrones];
+---
+
+<!-- Section 1: Hero -->
+<section class="relative z-20 bg-[var(--charcoal)] py-24 md:py-32">
+  <div class="container-shell px-6 text-center">
+    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--nautica-yellow)]">
+      {isEs ? "Desde 1995" : "Since 1995"}
+    </p>
+    <h1 class="mt-4 font-[var(--font-display)] text-4xl font-bold leading-tight text-[var(--warm-ivory)] md:text-6xl">
+      {t("history.title")}
+    </h1>
+    <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[var(--warm-ivory)]/70">
+      {t("history.subtitle")}
+    </p>
+  </div>
+</section>
+
+<!-- Section 2: Origin story -->
+<section class="relative z-20 bg-[var(--cream-1)] py-20">
+  <div class="container-shell px-6">
+    <div class="grid items-center gap-12 md:grid-cols-2">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--nautica-red)]">
+          {isEs ? "El comienzo" : "The beginning"}
+        </p>
+        <h2 class="mt-3 font-[var(--font-display)] text-3xl font-bold leading-snug text-[var(--charcoal)] md:text-4xl">
+          {isEs ? "Una tradici\u00F3n que naci\u00F3 junto al r\u00EDo" : "A tradition born by the river"}
+        </h2>
+        <p class="mt-6 leading-relaxed text-[var(--charcoal)]/75">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+        <p class="mt-4 leading-relaxed text-[var(--charcoal)]/75">
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
+        </p>
+      </div>
+      <div class="overflow-hidden rounded-2xl">
+        <img src={destacada3.src} alt="Pizza Nautica ingredientes" class="h-[450px] w-full object-cover" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: Accent quote -->
+<section class="relative z-20 bg-[var(--charcoal)] py-16 md:py-20">
+  <div class="container-shell px-6 text-center">
+    <p class="mx-auto max-w-3xl font-[var(--font-display)] text-2xl leading-relaxed text-[var(--warm-ivory)] md:text-3xl">
+      {isEs ? quoteEs : quoteEn}
+    </p>
+  </div>
+</section>
+
+<!-- Section 4: Three-image grid -->
+<section class="relative z-20 bg-[var(--cream-1)] py-20">
+  <div class="container-shell px-6">
+    <p class="text-center text-xs font-semibold uppercase tracking-[0.3em] text-[var(--nautica-red)]">
+      {isEs ? "Cada rinc\u00F3n, una historia" : "Every corner, a story"}
+    </p>
+    <h2 class="mt-3 text-center font-[var(--font-display)] text-3xl font-bold text-[var(--charcoal)] md:text-4xl">
+      {isEs ? "Nuestros espacios" : "Our spaces"}
+    </h2>
+    <div class="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div class="overflow-hidden rounded-xl">
+        <img src={historia1.src} alt="Pizza Nautica interior 1" class="h-[420px] w-full object-cover grayscale transition duration-700 ease-out hover:grayscale-0" loading="lazy" />
+      </div>
+      <div class="overflow-hidden rounded-xl">
+        <img src={historia2.src} alt="Pizza Nautica interior 2" class="h-[420px] w-full object-cover grayscale transition duration-700 ease-out hover:grayscale-0" loading="lazy" />
+      </div>
+      <div class="overflow-hidden rounded-xl">
+        <img src={historia3.src} alt="Pizza Nautica interior 3" class="h-[420px] w-full object-cover grayscale transition duration-700 ease-out hover:grayscale-0" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: Evolution -->
+<section class="relative z-20 bg-[var(--charcoal)] py-20">
+  <div class="container-shell px-6">
+    <div class="grid items-center gap-12 md:grid-cols-2">
+      <div class="overflow-hidden rounded-2xl md:order-1">
+        <img src={destacada4.src} alt="Pizza Nautica tradicion" class="h-[450px] w-full object-cover" loading="lazy" />
+      </div>
+      <div class="md:order-2">
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--nautica-yellow)]">
+          {isEs ? "Evoluci\u00F3n" : "Evolution"}
+        </p>
+        <h2 class="mt-3 font-[var(--font-display)] text-3xl font-bold leading-snug text-[var(--warm-ivory)] md:text-4xl">
+          {isEs ? "Hablar de N\u00E1utica es hablar de San Fernando" : "To speak of Nautica is to speak of San Fernando"}
+        </h2>
+        <p class="mt-6 leading-relaxed text-[var(--warm-ivory)]/70">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Maecenas faucibus mollis interdum.
+        </p>
+        <p class="mt-4 leading-relaxed text-[var(--warm-ivory)]/70">
+          Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 6: Carousel -->
+<section class="relative z-20 bg-[var(--cream-1)] py-20">
+  <div class="container-shell px-6">
+    <p class="text-center text-xs font-semibold uppercase tracking-[0.3em] text-[var(--nautica-red)]">
+      {isEs ? "Galer\u00EDa" : "Gallery"}
+    </p>
+    <h2 class="mt-3 text-center font-[var(--font-display)] text-3xl font-bold text-[var(--charcoal)] md:text-4xl">
+      {isEs ? "El sabor en im\u00E1genes" : "Flavor in images"}
+    </h2>
+
+    <div id="history-carousel" class="mt-12 overflow-hidden rounded-2xl" aria-roledescription="carousel" aria-label={isEs ? "Galer\u00EDa de im\u00E1genes" : "Image gallery"}>
+      <div id="carousel-track" class="flex transition-transform duration-700 ease-in-out">
+        {carouselImages.map((item, i) => (
+          <div class="w-full shrink-0" role="group" aria-roledescription="slide" aria-label={`${i + 1} / ${carouselImages.length}`}>
+            <img src={item.src} alt={`Pizza Nautica ${i + 1}`} class="h-[350px] w-full object-cover md:h-[500px]" loading="lazy" />
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-6 flex items-center justify-center gap-2">
+        {carouselImages.map((_, i) => (
+          <button
+            class="carousel-dot h-2.5 w-2.5 rounded-full border border-[var(--charcoal)]/30 bg-transparent transition-all duration-300"
+            data-index={i}
+            aria-label={`${isEs ? "Ir a imagen" : "Go to image"} ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initCarousel() {
+    const track = document.getElementById("carousel-track") as HTMLElement | null;
+    const dots = document.querySelectorAll(".carousel-dot");
+    if (!track || dots.length === 0) return;
+
+    const total = dots.length;
+    let current = 0;
+    let interval: ReturnType<typeof setInterval>;
+
+    function goTo(index: number) {
+      current = ((index % total) + total) % total;
+      track!.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => {
+        const active = i === current;
+        d.classList.toggle("bg-[var(--nautica-red)]", active);
+        d.classList.toggle("border-[var(--nautica-red)]", active);
+        d.classList.toggle("bg-transparent", !active);
+      });
+    }
+
+    function autoplay() {
+      interval = setInterval(() => goTo(current + 1), 5000);
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        clearInterval(interval);
+        goTo(Number((dot as HTMLElement).dataset.index));
+        autoplay();
+      });
+    });
+
+    goTo(0);
+    autoplay();
+  }
+
+  initCarousel();
+  document.addEventListener("astro:after-swap", initCarousel);
+</script>

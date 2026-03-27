@@ -53,7 +53,7 @@ const structuredData = {
     <main class:list={["min-h-screen", isHome ? "" : "pt-16"]}>
       <slot />
     </main>
-    {!isHome && <Footer lang={lang} />}
+    <Footer lang={lang} />
     <FloatingButtons lang={lang} />
   </body>
 </html>

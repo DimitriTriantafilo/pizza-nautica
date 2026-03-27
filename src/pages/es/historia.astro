@@ -1,39 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { Image } from "astro:assets";
-import { useTranslations } from "../../i18n/utils";
-import story1 from "../../assets/images/local/local-1-placeholder.svg";
-import story2 from "../../assets/images/local/local-2-placeholder.svg";
-
-const t = useTranslations("es");
+import HistoryContent from "../../components/HistoryContent.astro";
 ---
 
 <Layout
   lang="es"
   title="Pizza N·utica | Nuestra Historia"
-  description="Conoce la historia y tradiciÛn de Pizza N·utica en San Fernando, Buenos Aires."
+  description="ConocÈ la historia de Pizza N·utica: tradiciÛn, pasiÛn y sabor artesanal en San Fernando desde 1995."
   canonicalPath="/es/historia"
 >
-  <section class="container-shell py-16">
-    <h1 class="mb-4 text-4xl font-bold">{t("history.title")}</h1>
-    <p class="mb-12 max-w-3xl text-white/80">{t("history.subtitle")}</p>
-
-    <div class="grid gap-8 md:grid-cols-2">
-      <Image src={story1} alt="Historia del local" class="w-full rounded-2xl grayscale" />
-      <article class="section-card p-6">
-        <p class="leading-relaxed text-white/85">
-          Nacimos con una idea simple: unir tradici√≥n italiana, ingredientes nobles y el car√°cter √∫nico de
-          San Fernando. Con el tiempo, nuestro horno se convirti√≥ en un punto de encuentro para familias,
-          amigos y amantes de la pizza artesanal.
-        </p>
-      </article>
-      <article class="section-card p-6">
-        <p class="leading-relaxed text-white/85">
-          Cada receta conserva una t√©cnica cl√°sica, pero con una mirada actual. La masa se trabaja con
-          paciencia, el tomate se cocina en su punto justo y cada combinaci√≥n busca equilibrio y sabor real.
-        </p>
-      </article>
-      <Image src={story2} alt="TradiciÛn de la casa" class="w-full rounded-2xl grayscale" />
-    </div>
-  </section>
+  <HistoryContent lang="es" />
 </Layout>
