@@ -28,6 +28,7 @@ export const ui = {
     "menu.title": "Nuestro Menú",
     "menu.subtitle":
       "Sabores auténticos, sin precios en esta versión informativa.",
+    "menu.note": "Por ahora mostramos solo nombres de platos.",
     "menu.cta": "Ver Menú con Precios",
     "menu.classic": "Clásicas",
     "menu.special": "Especiales",
@@ -69,6 +70,7 @@ export const ui = {
     "menu.title": "Our Menu",
     "menu.subtitle":
       "Authentic flavors, prices are not included on this informational version.",
+    "menu.note": "For now, we are only showing dish names.",
     "menu.cta": "View Menu with Prices",
     "menu.classic": "Classics",
     "menu.special": "Specials",
