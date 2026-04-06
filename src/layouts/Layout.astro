@@ -50,7 +50,12 @@ const structuredData = {
   </head>
   <body>
     <Navbar lang={lang} currentPath={Astro.url.pathname} />
-    <main class:list={["min-h-screen", isHome ? "" : "pt-16"]}>
+    <main
+      class:list={[
+        "min-h-screen",
+        isHome ? "" : "pt-[var(--nav-height)]",
+      ]}
+    >
       <slot />
     </main>
     <Footer lang={lang} />

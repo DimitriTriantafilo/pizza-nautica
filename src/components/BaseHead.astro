@@ -1,4 +1,6 @@
 ---
+import faviconPng from "../assets/images/logo/white-logo.png";
+
 interface Props {
   title: string;
   description: string;
@@ -52,4 +54,5 @@ const alternateEn = new URL(canonicalPath.replace(/^\/(es|en)/, "/en"), site).to
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageUrl} />
 
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href={faviconPng.src} sizes="32x32" />
+<link rel="apple-touch-icon" href={faviconPng.src} />

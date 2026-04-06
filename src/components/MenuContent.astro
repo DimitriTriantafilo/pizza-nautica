@@ -1,5 +1,6 @@
 ---
-import { menuCategories, type Lang } from "../data/menu";
+import type { Lang } from "../data/menu";
+import { normalizeWebMenuResponse, WEB_MENU_URL } from "../lib/webmenu";
 import { useTranslations } from "../i18n/utils";
 
 interface Props {
@@ -8,114 +9,286 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+
+let loadError: string | null = null;
+let menuCategories = normalizeWebMenuResponse([]);
+
+try {
+  const res = await fetch(WEB_MENU_URL, {
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) {
+    loadError = `HTTP ${res.status}`;
+  } else {
+    const data: unknown = await res.json();
+    menuCategories = normalizeWebMenuResponse(data);
+    if (menuCategories.length === 0 && !loadError) {
+      loadError = "empty";
+    }
+  }
+} catch (e) {
+  loadError = e instanceof Error ? e.message : "fetch";
+}
 ---
 
 <section class="relative z-20 bg-[var(--charcoal)] py-24 md:py-32">
-  <div class="container-shell px-6 text-center">
+  <div
+    class="container-shell-wide flex flex-col items-center text-center"
+  >
     <p
-      class="text-xs font-semibold uppercase tracking-[0.3em]
+      class="w-full max-w-5xl text-xs font-semibold uppercase tracking-[0.3em]
       text-[var(--nautica-yellow)]"
     >
       {lang === "es" ? "Carta de la casa" : "House menu"}
     </p>
     <h1
-      class="mt-4 font-[var(--font-display)] text-4xl font-bold leading-tight
-      text-[var(--warm-ivory)] md:text-6xl"
+      class="mt-4 w-full max-w-6xl font-[var(--font-display)] text-[clamp(1.875rem,5vw,3.75rem)] font-bold leading-tight text-balance text-[var(--warm-ivory)] md:text-6xl"
     >
       {t("menu.title")}
     </h1>
-    <p class="mx-auto mt-6 max-w-3xl text-lg text-[var(--warm-ivory)]/75">
+    <p
+      class="mt-6 w-full max-w-5xl text-pretty text-base text-[var(--warm-ivory)]/75 sm:text-lg"
+    >
       {t("menu.subtitle")}
     </p>
-    <p class="mx-auto mt-2 max-w-3xl text-sm text-[var(--warm-ivory)]/55">
+    <p class="mt-2 w-full max-w-5xl text-pretty text-sm text-[var(--warm-ivory)]/55">
       {t("menu.note")}
     </p>
   </div>
 </section>
 
 {
-  menuCategories.map((category, categoryIndex) => (
-    <section
-      class:list={[
-        "relative z-20 py-16 md:py-20",
-        categoryIndex % 2 === 0
-          ? "bg-[var(--cream-1)]"
-          : "bg-[var(--charcoal)]",
-      ]}
+  !loadError && menuCategories.length > 0 && (
+    <nav
+      data-menu-rubro-nav
+      class="menu-rubro-nav sticky z-40 border-b border-white/10 bg-[var(--charcoal)]/95 shadow-[0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-md"
+      aria-label={t("menu.rubroNav")}
     >
-      <div class="container-shell px-6">
-        <h2
-          class:list={[
-            "text-center font-[var(--font-display)] text-4xl font-bold",
-            "md:text-5xl",
-            categoryIndex % 2 === 0
-              ? "text-[var(--charcoal)]"
-              : "text-[var(--warm-ivory)]",
-          ]}
+      <div class="container-shell-wide py-3">
+        <ul
+          class="flex flex-nowrap items-stretch justify-start gap-2 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-wrap lg:justify-center lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
         >
-          {category.name[lang]}
-        </h2>
-
-        <div class="mx-auto mt-6 flex w-full max-w-xl items-center gap-3">
-          <span
-            class:list={[
-              "h-px flex-1",
-              categoryIndex % 2 === 0
-                ? "bg-[var(--charcoal)]/20"
-                : "bg-[var(--warm-ivory)]/30",
-            ]}
-          ></span>
-          <span
-            class:list={[
-              "h-2 w-2 rounded-full",
-              categoryIndex % 2 === 0
-                ? "bg-[var(--nautica-red)]"
-                : "bg-[var(--nautica-yellow)]",
-            ]}
-          ></span>
-          <span
-            class:list={[
-              "h-px flex-1",
-              categoryIndex % 2 === 0
-                ? "bg-[var(--charcoal)]/20"
-                : "bg-[var(--warm-ivory)]/30",
-            ]}
-          ></span>
-        </div>
-
-        <div class="mt-12 grid gap-10 lg:grid-cols-2">
-          {category.subCategories.map((subCategory) => (
-            <article>
-              <h3
-                class:list={[
-                  "text-sm font-semibold uppercase tracking-[0.25em]",
-                  categoryIndex % 2 === 0
-                    ? "text-[var(--nautica-red)]"
-                    : "text-[var(--nautica-yellow)]",
-                ]}
+          {menuCategories.map((category, idx) => (
+            <li class="flex shrink-0 snap-start">
+              <a
+                href={`#${category.id}`}
+                class="inline-flex max-w-[min(100vw-4rem,14rem)] items-center justify-center rounded-full border border-white/25 px-3 py-2 text-center text-[0.7rem] font-semibold uppercase leading-tight tracking-wide text-[var(--warm-ivory)] transition hover:border-[var(--nautica-yellow)] hover:text-[var(--nautica-yellow)] sm:max-w-none sm:px-4 sm:text-xs"
+                aria-current={idx === 0 ? "location" : undefined}
               >
-                {subCategory.name[lang]}
-              </h3>
-
-              <ul class="mt-5 divide-y" role="list">
-                {subCategory.dishes[lang].map((dish) => (
-                  <li
-                    class:list={[
-                      "py-3 text-base",
-                      "md:text-lg",
-                      categoryIndex % 2 === 0
-                        ? "border-[var(--charcoal)]/15 text-[var(--charcoal)]"
-                        : "border-[var(--warm-ivory)]/20 text-[var(--warm-ivory)]",
-                    ]}
-                  >
-                    {dish.name}
-                  </li>
-                ))}
-              </ul>
-            </article>
+                {category.name[lang]}
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
+      </div>
+    </nav>
+  )
+}
+
+{
+  loadError && loadError !== "empty" && (
+    <section class="relative z-20 bg-[var(--cream-1)] py-16">
+      <div class="container-shell-wide py-0 text-center">
+        <p class="text-[var(--nautica-red)]" role="alert">
+          {lang === "es"
+            ? "No pudimos cargar el menú en este momento. Probá más tarde."
+            : "We could not load the menu right now. Please try again later."}
+        </p>
       </div>
     </section>
-  ))
+  )
 }
+
+{
+  loadError === "empty" && (
+    <section class="relative z-20 bg-[var(--cream-1)] py-16">
+      <div class="container-shell-wide py-0 text-center">
+        <p class="text-[var(--charcoal)]/70">
+          {lang === "es"
+            ? "El menú no tiene ítems disponibles."
+            : "The menu has no items available."}
+        </p>
+      </div>
+    </section>
+  )
+}
+
+{
+  !loadError &&
+    menuCategories.map((category, categoryIndex) => (
+      <section
+        id={category.id}
+        class:list={[
+          "scroll-mt-[calc(var(--nav-height)+3.5rem)]",
+          "relative z-20 py-16 md:py-20",
+          categoryIndex % 2 === 0
+            ? "bg-[var(--cream-1)]"
+            : "bg-[var(--charcoal)]",
+        ]}
+      >
+        <div class="container-shell-wide">
+          <h2
+            class:list={[
+              "mx-auto max-w-[min(100%,40rem)] text-center text-balance",
+              "font-[var(--font-display)] text-[clamp(1.75rem,4vw,3rem)] font-bold",
+              "leading-tight md:text-5xl",
+              categoryIndex % 2 === 0
+                ? "text-[var(--charcoal)]"
+                : "text-[var(--warm-ivory)]",
+            ]}
+          >
+            {category.name[lang]}
+          </h2>
+
+          <div class="mx-auto mt-6 flex w-full max-w-xl items-center gap-3">
+            <span
+              class:list={[
+                "h-px flex-1",
+                categoryIndex % 2 === 0
+                  ? "bg-[var(--charcoal)]/20"
+                  : "bg-[var(--warm-ivory)]/30",
+              ]}
+            />
+            <span
+              class:list={[
+                "h-2 w-2 rounded-full",
+                categoryIndex % 2 === 0
+                  ? "bg-[var(--nautica-red)]"
+                  : "bg-[var(--nautica-yellow)]",
+              ]}
+            />
+            <span
+              class:list={[
+                "h-px flex-1",
+                categoryIndex % 2 === 0
+                  ? "bg-[var(--charcoal)]/20"
+                  : "bg-[var(--warm-ivory)]/30",
+              ]}
+            />
+          </div>
+
+          <div class="mt-12 flex flex-col gap-10">
+            {category.subCategories.map((subCategory) => (
+              <article class="min-w-0 w-full">
+                {!subCategory.hideHeading &&
+                  (subCategory.name.es.trim() !== "" ||
+                    subCategory.name.en.trim() !== "") && (
+                    <h3
+                      class:list={[
+                        "text-sm font-semibold uppercase tracking-[0.25em]",
+                        categoryIndex % 2 === 0
+                          ? "text-[var(--nautica-red)]"
+                          : "text-[var(--nautica-yellow)]",
+                      ]}
+                    >
+                      {subCategory.name[lang]}
+                    </h3>
+                  )}
+
+                <ul
+                  class:list={[
+                    "grid grid-cols-1 gap-0 md:grid-cols-2 md:gap-x-10 md:gap-y-0",
+                    !subCategory.hideHeading &&
+                    (subCategory.name.es.trim() !== "" ||
+                      subCategory.name.en.trim() !== "")
+                      ? "mt-5"
+                      : "mt-0",
+                  ]}
+                  role="list"
+                >
+                  {subCategory.dishes[lang].map((dish) => (
+                    <li
+                      class:list={[
+                        "border-b py-3 last:border-b-0",
+                        categoryIndex % 2 === 0
+                          ? "border-[var(--charcoal)]/15"
+                          : "border-[var(--warm-ivory)]/20",
+                      ]}
+                    >
+                      <span
+                        class:list={[
+                          "block text-base font-medium md:text-lg",
+                          "text-pretty",
+                          categoryIndex % 2 === 0
+                            ? "text-[var(--charcoal)]"
+                            : "text-[var(--warm-ivory)]",
+                        ]}
+                      >
+                        {dish.name}
+                      </span>
+                      {dish.detail && (
+                        <span
+                          class:list={[
+                            "mt-1 block text-sm leading-relaxed md:text-base",
+                            "text-pretty",
+                            categoryIndex % 2 === 0
+                              ? "text-[var(--charcoal)]/65"
+                              : "text-[var(--warm-ivory)]/65",
+                          ]}
+                        >
+                          {dish.detail}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    ))
+}
+
+<script>
+  function initMenuRubroNav() {
+    const nav = document.querySelector("[data-menu-rubro-nav]");
+    if (!nav || !("IntersectionObserver" in window)) return;
+
+    const links = [...nav.querySelectorAll('a[href^="#"]')];
+    if (links.length === 0) return;
+
+    const sections = links
+      .map((a) => {
+        const id = a.getAttribute("href")?.slice(1);
+        return id ? document.getElementById(id) : null;
+      })
+      .filter((el) => el !== null);
+
+    function setActive(id) {
+      links.forEach((link) => {
+        const href = link.getAttribute("href")?.slice(1);
+        if (href === id) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible.length === 0) return;
+        setActive(visible[0].target.id);
+      },
+      {
+        root: null,
+        rootMargin: "-18% 0px -52% 0px",
+        threshold: [0, 0.06, 0.12, 0.2],
+      }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+
+    const hash = window.location.hash.slice(1);
+    if (hash && document.getElementById(hash)) {
+      setActive(hash);
+    }
+  }
+
+  initMenuRubroNav();
+  document.addEventListener("astro:after-swap", initMenuRubroNav);
+</script>

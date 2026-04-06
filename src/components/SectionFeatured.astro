@@ -12,14 +12,14 @@ interface Props {
 const { lang } = Astro.props;
 ---
 
-<section class="relative z-20 overflow-x-hidden bg-[var(--cream-1)] pb-16 pt-24">
+<section class="relative z-20 bg-[var(--cream-1)] pb-16 pt-24">
   <h2
     id="featured-heading"
-    class="text-center font-[var(--font-display)] text-[1.9rem] leading-tight text-[var(--charcoal)] md:text-[2.25rem] transform translate-y-4 scale-95 opacity-0 transition duration-900 ease-out"
+    class="mx-auto max-w-[min(100%,34rem)] px-4 text-center text-[clamp(1.25rem,4.2vw,2.25rem)] font-[var(--font-display)] font-bold leading-snug text-[var(--charcoal)] text-balance sm:px-6 md:max-w-[40rem] md:leading-tight transform translate-y-4 scale-95 opacity-0 transition duration-900 ease-out"
   >
     {lang === "es" ? (
       <>
-        <span class="text-[var(--nautica-red)]">30 años</span> en el corazon de San Fernando
+        <span class="text-[var(--nautica-red)]">30 años</span> en el corazón de San Fernando
       </>
     ) : (
       <>
@@ -39,9 +39,11 @@ const { lang } = Astro.props;
     />
   </div>
 
-  <div class="mx-auto mt-16 flex max-w-[1200px] flex-col gap-10 px-4 md:flex-row md:items-center">
-    <div class="md:w-1/2">
-      <p class="font-[var(--font-body)] text-base text-[var(--charcoal)] md:text-lg">
+  <div
+    class="mx-auto mt-16 flex max-w-[1200px] flex-col gap-10 px-4 sm:px-6 md:flex-row md:items-center"
+  >
+    <div class="min-w-0 md:w-1/2">
+      <p class="font-[var(--font-body)] text-base text-[var(--charcoal)] text-pretty md:text-lg">
         {lang === "es"
           ? "Fuego prendido masa lista y todos los ingredientes de primera calidad para llevar a tu mesa una pizza de primer nivel."
           : "A glimpse into our kitchen: dough, fire, and conversations by the oven."}
@@ -53,10 +55,9 @@ const { lang } = Astro.props;
       </div>
     </div>
 
-    <div class="md:w-1/2">
-      <div class="relative mx-auto h-[320px] w-[420px]">
-  
-        <div class="absolute left-0 top-4 z-10 h-[200px] w-[220px] rotate-4 overflow-hidden shadow-nautica-lg">
+    <div class="min-w-0 md:w-1/2">
+      <div class="relative mx-auto h-[280px] w-full max-w-[420px] sm:h-[320px]">
+        <div class="absolute left-0 top-4 z-10 h-[200px] w-[53%] max-w-[220px] rotate-4 overflow-hidden shadow-nautica-lg">
           <Image
             src={sideImageSecond}
             alt={lang === "es" ? "Ingredientes listos para la pizza" : "Pizza ingredients ready"}
@@ -66,7 +67,9 @@ const { lang } = Astro.props;
             loading="lazy"
           />
         </div>
-         <div class="absolute right-0 top-0  z-8 h-[200px] w-[220px] -rotate-4 overflow-hidden shadow-nautica-lg">
+        <div
+          class="absolute right-0 top-0 z-8 h-[200px] w-[53%] max-w-[220px] -rotate-4 overflow-hidden shadow-nautica-lg"
+        >
            <Image
             src={sideImageThird}
             alt={lang === "es" ? "Detalle de cocina de Pizza Náutica" : "Pizza Nautica kitchen detail"}
@@ -91,7 +94,7 @@ const { lang } = Astro.props;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             heading.classList.remove("translate-y-4", "scale-95", "opacity-0");
-            heading.classList.add("translate-y-0", "scale-110", "opacity-100");
+            heading.classList.add("translate-y-0", "scale-100", "opacity-100");
             observer.disconnect();
           }
         });
@@ -102,6 +105,6 @@ const { lang } = Astro.props;
     observer.observe(heading);
   } else if (heading) {
     heading.classList.remove("translate-y-4", "scale-95", "opacity-0");
-    heading.classList.add("translate-y-0", "scale-110", "opacity-100");
+    heading.classList.add("translate-y-0", "scale-100", "opacity-100");
   }
 </script>

@@ -120,11 +120,17 @@ const isActive = (path: string) => currentPath === path || (path.endsWith("/") &
    // En desktop la barra comienza oculta hasta que el usuario interactúa
   let startHidden = window.innerWidth >= 768;
 
+  /** Sync CSS var for sticky offsets (rubro nav, main padding) site-wide. */
+  const setNavHeight = (value) => {
+    header?.style.setProperty("--nav-height", value);
+    document.documentElement.style.setProperty("--nav-height", value);
+  };
+
   const updateHeaderHeight = () => {
     if (!header) return;
     // En móvil mantenemos siempre visible el topbar
     if (window.innerWidth < 768) {
-      header.style.setProperty("--nav-height", `${maxHeight}px`);
+      setNavHeight(`${maxHeight}px`);
       header.classList.remove("navbar-hidden");
       header.classList.add("navbar-compact");
       return;
@@ -132,14 +138,14 @@ const isActive = (path: string) => currentPath === path || (path.endsWith("/") &
 
     // Estado inicial: barra oculta hasta que el usuario scrollea o pasa el mouse por arriba
     if (startHidden && !menuOpen && !forceExpanded) {
-      header.style.setProperty("--nav-height", "0px");
+      setNavHeight("0px");
       header.classList.add("navbar-hidden");
       header.classList.remove("navbar-compact");
       return;
     }
 
     if (menuOpen || forceExpanded) {
-      header.style.setProperty("--nav-height", `${maxHeight}px`);
+      setNavHeight(`${maxHeight}px`);
       header.classList.remove("navbar-hidden");
       header.classList.add("navbar-compact");
       return;
@@ -147,7 +153,7 @@ const isActive = (path: string) => currentPath === path || (path.endsWith("/") &
 
     const progress = Math.min(window.scrollY / collapseDistance, 1);
     const nextHeight = Math.max(0, maxHeight * (1 - progress));
-    header.style.setProperty("--nav-height", `${nextHeight}px`);
+    setNavHeight(`${nextHeight}px`);
     header.classList.toggle("navbar-hidden", nextHeight <= 1);
     header.classList.toggle("navbar-compact", nextHeight > 1);
   };

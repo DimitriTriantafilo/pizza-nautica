@@ -26,22 +26,34 @@ const t = useTranslations(lang);
   />
   <div class="fixed inset-0 bg-black/50"></div>
 
-  <div class="container-shell relative z-10 flex min-h-screen flex-col justify-between py-6 pb-12 pt-24 text-left md:pb-16 md:pt-28">
-    <div>
-      <Image
-        src={whiteLogo}
-        alt="Pizza Nautica"
-        width={140}
-        height={140}
-        class="h-auto w-24 object-contain md:w-32"
-      />
-    </div>
+  <!-- Brand mark: top-left of viewport (not aligned with title block below). -->
+  <div
+    class="pointer-events-none absolute left-0 top-0 z-10
+      pl-[max(0.5rem,env(safe-area-inset-left))]
+      pt-[max(4.5rem,calc(env(safe-area-inset-top)+3.75rem))]
+      md:pl-16 md:pt-28 lg:pl-[150px]"
+  >
+    <Image
+      src={whiteLogo}
+      alt="Pizza Nautica"
+      width={140}
+      height={140}
+      class="pointer-events-auto h-auto w-[5.25rem] object-contain sm:w-24 md:w-[6.75rem]"
+    />
+  </div>
 
-    <div>
-      <h1 class="font-[var(--font-display)] text-[2.5rem] font-bold leading-[1.08] tracking-widest text-white md:text-[4rem]">
+  <div
+    class="container-shell relative z-10 flex min-h-screen flex-col justify-end pb-12 pt-24 text-left md:pb-16 md:pt-28"
+  >
+    <div class="min-w-0 max-w-full pr-[env(safe-area-inset-right)]">
+      <h1
+        class="font-[var(--font-display)] text-[clamp(1.75rem,6vw,4rem)] font-bold leading-[1.08] tracking-widest text-white"
+      >
         Pizza Nautica
       </h1>
-      <p class="mt-2 font-[var(--font-body)] text-sm font-medium uppercase tracking-[0.14em] text-white/80 md:text-base">
+      <p
+        class="mt-2 max-w-[min(100%,30rem)] font-[var(--font-body)] text-xs font-medium uppercase leading-snug tracking-[0.12em] text-white/85 text-pretty sm:text-sm sm:tracking-[0.14em] md:max-w-2xl md:text-base"
+      >
         {t("site.lema")}
       </p>
     </div>
