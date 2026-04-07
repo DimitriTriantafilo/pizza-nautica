@@ -1,9 +1,9 @@
 ---
 import { Image } from "astro:assets";
 import featuredDish from "../assets/images/hero/destacada1.jpg";
-import sideImageMain from "../assets/images/hero/destacada 4.jpg";
-import sideImageSecond from "../assets/images/hero/destacada2.jpg";
+import sideImageSecond from "../assets/images/hero/pizza1.jpg";
 import sideImageThird from "../assets/images/hero/morrones.jpg";
+import sideImageFourth from "../assets/images/hero/pizza2.jpg";
 
 interface Props {
   lang: "es" | "en";
@@ -32,7 +32,7 @@ const { lang } = Astro.props;
     <Image
       src={featuredDish}
       alt={lang === "es" ? "Pizza promocional destacada del menú" : "Featured promotional pizza from the menu"}
-      class="h-[430px] w-full object-cover mt-35"
+      class="mt-35 h-[190px] w-full object-contain md:h-[430px] md:object-cover"
       widths={[800, 1280, 1920]}
       sizes="100vw"
       loading="lazy"
@@ -60,7 +60,7 @@ const { lang } = Astro.props;
         <div class="absolute left-0 top-4 z-10 h-[200px] w-[53%] max-w-[220px] rotate-4 overflow-hidden shadow-nautica-lg">
           <Image
             src={sideImageSecond}
-            alt={lang === "es" ? "Ingredientes listos para la pizza" : "Pizza ingredients ready"}
+            alt={lang === "es" ? "Pizza con jamón crudo y queso" : "Pizza with prosciutto and cheese"}
             class="h-full w-full object-cover"
             widths={[320, 480]}
             sizes="220px"
@@ -72,14 +72,23 @@ const { lang } = Astro.props;
         >
            <Image
             src={sideImageThird}
-            alt={lang === "es" ? "Detalle de cocina de Pizza Náutica" : "Pizza Nautica kitchen detail"}
+            alt={lang === "es" ? "Morrones al horno de Pizza Náutica" : "Roasted peppers at Pizza Nautica"}
             class="h-full w-full object-cover"
             widths={[320, 480]}
             sizes="220px"
             loading="lazy"
           />
         </div>
-      
+        <div class="absolute -right-4 top-8 z-[7] h-[200px] w-[220px] rotate-2 overflow-hidden shadow-nautica-lg">
+          <Image
+            src={sideImageFourth}
+            alt={lang === "es" ? "Pizza con albahaca y rúcula" : "Pizza with basil and arugula"}
+            class="h-full w-full object-cover"
+            widths={[320, 480]}
+            sizes="220px"
+            loading="lazy"
+          />
+        </div>
       </div>
     </div>
   </div>

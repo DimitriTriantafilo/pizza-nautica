@@ -8,6 +8,9 @@ import historia1 from "../assets/images/hero/historia 1.jpg";
 import historia2 from "../assets/images/hero/historia 2.jpg";
 import historia3 from "../assets/images/hero/historia 3.jpg";
 import morrones from "../assets/images/hero/morrones.jpg";
+import historiaFrente from "../assets/images/hero/historia frente.jpg";
+import historiaFoto1 from "../assets/images/hero/historia1.jpg";
+import historia4 from "../assets/images/hero/historia4.jpg";
 
 interface Props {
   lang: "es" | "en";
@@ -21,11 +24,16 @@ const quoteEs = `\u201CLa pizza es mucho m\u00E1s que masa y salsa. Es el fuego,
 const quoteEn = `\u201CPizza is much more than dough and sauce. It\u2019s the fire, the wait, the aroma that fills the room and the smile of whoever receives it.\u201D`;
 
 const carouselImages = [destacada1, destacada2, destacada3, destacada4, morrones];
+const spacesImages = [historia1, historia2, historia3];
 ---
 
 <!-- Section 1: Hero -->
-<section class="relative z-20 bg-[var(--charcoal)] py-24 md:py-32">
-  <div class="container-shell px-6 text-center">
+<section
+  class="relative z-20 overflow-hidden bg-cover bg-center bg-fixed py-24 md:py-32"
+  style={`background-image: url('${historiaFrente.src}');`}
+>
+  <div class="absolute inset-0 bg-black/50"></div>
+  <div class="container-shell relative z-10 px-6 text-center">
     <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--nautica-yellow)]">
       {isEs ? "Desde 1995" : "Since 1995"}
     </p>
@@ -57,15 +65,22 @@ const carouselImages = [destacada1, destacada2, destacada3, destacada4, morrones
         </p>
       </div>
       <div class="overflow-hidden rounded-2xl">
-        <img src={destacada3.src} alt="Pizza Nautica ingredientes" class="h-[450px] w-full object-cover" loading="lazy" />
+        <img src={historiaFoto1.src} alt="Pizza Nautica interior" class="h-[450px] w-full object-cover" loading="lazy" />
       </div>
     </div>
   </div>
 </section>
 
 <!-- Section 3: Accent quote -->
-<section class="relative z-20 bg-[var(--charcoal)] py-16 md:py-20">
-  <div class="container-shell px-6 text-center">
+<section class="relative z-20 overflow-hidden py-16 md:py-20">
+  <img
+    src={historia4.src}
+    alt="Pizza Nautica ambience"
+    class="absolute inset-0 h-full w-full object-cover"
+    loading="lazy"
+  />
+  <div class="absolute inset-0 bg-black/60"></div>
+  <div class="container-shell relative z-10 px-6 text-center">
     <p class="mx-auto max-w-3xl font-[var(--font-display)] text-2xl leading-relaxed text-[var(--warm-ivory)] md:text-3xl">
       {isEs ? quoteEs : quoteEn}
     </p>
@@ -81,7 +96,31 @@ const carouselImages = [destacada1, destacada2, destacada3, destacada4, morrones
     <h2 class="mt-3 text-center font-[var(--font-display)] text-3xl font-bold text-[var(--charcoal)] md:text-4xl">
       {isEs ? "Nuestros espacios" : "Our spaces"}
     </h2>
-    <div class="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div
+      id="history-spaces-carousel"
+      class="mt-12 overflow-hidden rounded-xl sm:hidden"
+      aria-roledescription="carousel"
+      aria-label={isEs ? "Galería de espacios" : "Spaces gallery"}
+    >
+      <div id="history-spaces-track" class="flex transition-transform duration-700 ease-in-out">
+        {spacesImages.map((item, i) => (
+          <div class="w-full shrink-0 overflow-hidden rounded-xl" role="group" aria-roledescription="slide" aria-label={`${i + 1} / ${spacesImages.length}`}>
+            <img src={item.src} alt={`Pizza Nautica interior ${i + 1}`} class="h-[420px] w-full object-cover grayscale" loading="lazy" />
+          </div>
+        ))}
+      </div>
+      <div class="mt-4 flex items-center justify-center gap-2">
+        {spacesImages.map((_, i) => (
+          <button
+            class="spaces-dot h-2.5 w-2.5 rounded-full border border-[var(--charcoal)]/30 bg-transparent transition-all duration-300"
+            data-index={i}
+            aria-label={`${isEs ? "Ir a imagen" : "Go to image"} ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-12 hidden grid-cols-1 gap-4 sm:grid sm:grid-cols-3">
       <div class="overflow-hidden rounded-xl">
         <img src={historia1.src} alt="Pizza Nautica interior 1" class="h-[420px] w-full object-cover grayscale transition duration-700 ease-out hover:grayscale-0" loading="lazy" />
       </div>
@@ -153,6 +192,42 @@ const carouselImages = [destacada1, destacada2, destacada3, destacada4, morrones
 </section>
 
 <script>
+  function initSpacesCarousel() {
+    const track = document.getElementById("history-spaces-track") as HTMLElement | null;
+    const dots = document.querySelectorAll(".spaces-dot");
+    if (!track || dots.length === 0) return;
+
+    const total = dots.length;
+    let current = 0;
+    let interval: ReturnType<typeof setInterval>;
+
+    function goTo(index: number) {
+      current = ((index % total) + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => {
+        const active = i === current;
+        d.classList.toggle("bg-[var(--nautica-red)]", active);
+        d.classList.toggle("border-[var(--nautica-red)]", active);
+        d.classList.toggle("bg-transparent", !active);
+      });
+    }
+
+    function autoplay() {
+      interval = setInterval(() => goTo(current + 1), 4500);
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        clearInterval(interval);
+        goTo(Number((dot as HTMLElement).dataset.index));
+        autoplay();
+      });
+    });
+
+    goTo(0);
+    autoplay();
+  }
+
   function initCarousel() {
     const track = document.getElementById("carousel-track") as HTMLElement | null;
     const dots = document.querySelectorAll(".carousel-dot");
@@ -189,6 +264,8 @@ const carouselImages = [destacada1, destacada2, destacada3, destacada4, morrones
     autoplay();
   }
 
+  initSpacesCarousel();
   initCarousel();
+  document.addEventListener("astro:after-swap", initSpacesCarousel);
   document.addEventListener("astro:after-swap", initCarousel);
 </script>

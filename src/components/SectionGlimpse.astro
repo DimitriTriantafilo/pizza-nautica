@@ -9,43 +9,63 @@ interface Props {
 }
 
 const { lang } = Astro.props;
+const glimpseImages = [
+  {
+    src: historia1,
+    alt: lang === "es" ? "Escena de cocina de Pizza Náutica" : "Kitchen scene at Pizza Nautica",
+  },
+  {
+    src: historia2,
+    alt: lang === "es" ? "Preparación artesanal de masa" : "Artisan dough preparation",
+  },
+  {
+    src: historia3,
+    alt: lang === "es" ? "Ambientación interior de Pizza Náutica" : "Interior ambience at Pizza Nautica",
+  },
+];
 ---
 
 <section class="relative z-20 bg-[var(--cream-1)] pb-24 pt-6">
   <div class="container-shell px-4 md:px-4">
-    <div class="mx-auto grid max-w-[1200px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <article class="overflow-hidden rounded-[12px] shadow-nautica-lg">
-        <Image
-          src={historia1}
-          alt={lang === "es" ? "Escena de cocina de Pizza Náutica" : "Kitchen scene at Pizza Nautica"}
-          class="h-[500px] w-full object-cover grayscale transition duration-700 ease-out hover:grayscale-0"
-          widths={[640, 960, 1280]}
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          loading="lazy"
-        />
-      </article>
+    <div id="glimpse-carousel" class="sm:hidden overflow-hidden rounded-[12px] shadow-nautica-lg" aria-roledescription="carousel" aria-label={lang === "es" ? "Galería de historia" : "Story gallery"}>
+      <div id="glimpse-track" class="flex transition-transform duration-700 ease-in-out">
+        {glimpseImages.map((item, i) => (
+          <article class="w-full shrink-0 overflow-hidden rounded-[12px]" role="group" aria-roledescription="slide" aria-label={`${i + 1} / ${glimpseImages.length}`}>
+            <Image
+              src={item.src}
+              alt={item.alt}
+              class="h-[500px] w-full object-cover grayscale"
+              widths={[640, 960, 1280]}
+              sizes="100vw"
+              loading="lazy"
+            />
+          </article>
+        ))}
+      </div>
+      <div class="mt-4 flex items-center justify-center gap-2 pb-1">
+        {glimpseImages.map((_, i) => (
+          <button
+            class="glimpse-dot h-2.5 w-2.5 rounded-full border border-[var(--charcoal)]/30 bg-transparent transition-all duration-300"
+            data-index={i}
+            aria-label={`${lang === "es" ? "Ir a imagen" : "Go to image"} ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
 
-      <article class="overflow-hidden rounded-[12px] shadow-nautica-lg">
-        <Image
-          src={historia2}
-          alt={lang === "es" ? "Preparación artesanal de masa" : "Artisan dough preparation"}
-          class="h-[500px] w-full object-cover grayscale transition duration-700 ease-out hover:grayscale-0"
-          widths={[640, 960, 1280]}
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          loading="lazy"
-        />
-      </article>
-
-      <article class="overflow-hidden rounded-[12px] shadow-nautica-lg">
-        <Image
-          src={historia3}
-          alt={lang === "es" ? "Ambientación interior de Pizza Náutica" : "Interior ambience at Pizza Nautica"}
-          class="h-[500px] w-full object-cover grayscale transition duration-700 ease-out hover:grayscale-0"
-          widths={[640, 960, 1280]}
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          loading="lazy"
-        />
-      </article>
+    <div class="mx-auto hidden max-w-[1200px] grid-cols-1 gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+      {glimpseImages.map((item) => (
+        <article class="overflow-hidden rounded-[12px] shadow-nautica-lg">
+          <Image
+            src={item.src}
+            alt={item.alt}
+            class="h-[500px] w-full object-cover grayscale transition duration-700 ease-out hover:grayscale-0"
+            widths={[640, 960, 1280]}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            loading="lazy"
+          />
+        </article>
+      ))}
     </div>
 
     <div class="mt-10 flex justify-center">
@@ -53,3 +73,44 @@ const { lang } = Astro.props;
     </div>
   </div>
 </section>
+
+<script>
+  function initGlimpseCarousel() {
+    const track = document.getElementById("glimpse-track") as HTMLElement | null;
+    const dots = document.querySelectorAll(".glimpse-dot");
+    if (!track || dots.length === 0) return;
+
+    const total = dots.length;
+    let current = 0;
+    let interval: ReturnType<typeof setInterval>;
+
+    function goTo(index: number) {
+      current = ((index % total) + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => {
+        const active = i === current;
+        d.classList.toggle("bg-[var(--nautica-red)]", active);
+        d.classList.toggle("border-[var(--nautica-red)]", active);
+        d.classList.toggle("bg-transparent", !active);
+      });
+    }
+
+    function autoplay() {
+      interval = setInterval(() => goTo(current + 1), 4500);
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        clearInterval(interval);
+        goTo(Number((dot as HTMLElement).dataset.index));
+        autoplay();
+      });
+    });
+
+    goTo(0);
+    autoplay();
+  }
+
+  initGlimpseCarousel();
+  document.addEventListener("astro:after-swap", initGlimpseCarousel);
+</script>
