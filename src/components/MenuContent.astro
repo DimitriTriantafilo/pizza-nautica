@@ -9,6 +9,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const menuPricesUrl = "https://www.pizzanautica.com.ar/qr/";
 
 let loadError: string | null = null;
 let menuCategories = normalizeWebMenuResponse([]);
@@ -57,33 +58,43 @@ try {
   </div>
 </section>
 
-{
-  !loadError && menuCategories.length > 0 && (
-    <nav
-      data-menu-rubro-nav
-      class="menu-rubro-nav sticky z-40 border-b border-white/10 bg-[var(--charcoal)]/95 shadow-[0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-md"
-      aria-label={t("menu.rubroNav")}
-    >
-      <div class="container-shell-wide py-3">
-        <ul
-          class="flex flex-nowrap items-stretch justify-start gap-2 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-wrap lg:justify-center lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
-        >
-          {menuCategories.map((category, idx) => (
-            <li class="flex shrink-0 snap-start">
-              <a
-                href={`#${category.id}`}
-                class="inline-flex max-w-[min(100vw-4rem,14rem)] items-center justify-center rounded-full border border-white/25 px-3 py-2 text-center text-[0.7rem] font-semibold uppercase leading-tight tracking-wide text-[var(--warm-ivory)] transition hover:border-[var(--nautica-yellow)] hover:text-[var(--nautica-yellow)] sm:max-w-none sm:px-4 sm:text-xs"
-                aria-current={idx === 0 ? "location" : undefined}
-              >
-                {category.name[lang]}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </nav>
-  )
-}
+<nav
+  data-menu-rubro-nav
+  class="menu-rubro-nav sticky z-40 border-b border-white/10 bg-[var(--charcoal)]/95 shadow-[0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-md"
+  aria-label={t("menu.rubroNav")}
+>
+  <div class="container-shell-wide py-3">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      {
+        !loadError && menuCategories.length > 0 && (
+          <ul
+            class="flex min-w-0 flex-1 flex-nowrap items-stretch justify-start gap-2 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-wrap lg:justify-center lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
+          >
+            {menuCategories.map((category, idx) => (
+              <li class="flex shrink-0 snap-start">
+                <a
+                  href={`#${category.id}`}
+                  class="inline-flex max-w-[min(100vw-4rem,14rem)] items-center justify-center rounded-full border border-white/25 px-3 py-2 text-center text-[0.7rem] font-semibold uppercase leading-tight tracking-wide text-[var(--warm-ivory)] transition hover:border-[var(--nautica-yellow)] hover:text-[var(--nautica-yellow)] sm:max-w-none sm:px-4 sm:text-xs"
+                  aria-current={idx === 0 ? "location" : undefined}
+                >
+                  {category.name[lang]}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <a
+        href={menuPricesUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex shrink-0 self-center items-center justify-center rounded-full border border-[var(--nautica-yellow)] bg-[var(--nautica-yellow)] px-3 py-2 text-center text-[0.7rem] font-semibold uppercase leading-tight tracking-wide text-[var(--charcoal)] transition hover:border-[var(--warm-ivory)] hover:bg-[var(--warm-ivory)] hover:text-[var(--charcoal)] sm:self-auto sm:px-4 sm:text-xs whitespace-nowrap"
+      >
+        {t("nav.menuWithPrices")}
+      </a>
+    </div>
+  </div>
+</nav>
 
 {
   loadError && loadError !== "empty" && (

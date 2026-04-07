@@ -173,7 +173,12 @@ const spacesImages = [historia1, historia2, historia3];
       <div id="carousel-track" class="flex transition-transform duration-700 ease-in-out">
         {carouselImages.map((item, i) => (
           <div class="w-full shrink-0" role="group" aria-roledescription="slide" aria-label={`${i + 1} / ${carouselImages.length}`}>
-            <img src={item.src} alt={`Pizza Nautica ${i + 1}`} class="h-[350px] w-full object-cover md:h-[500px]" loading="lazy" />
+            <img
+              src={item.src}
+              alt={`Pizza Nautica ${i + 1}`}
+              class={`h-[350px] w-full md:h-[500px] ${i === 0 ? "object-cover object-top" : "object-cover"}`}
+              loading="lazy"
+            />
           </div>
         ))}
       </div>

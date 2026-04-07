@@ -12,7 +12,7 @@ interface Props {
 const { lang } = Astro.props;
 ---
 
-<section class="relative z-20 bg-[var(--cream-1)] pb-16 pt-24">
+<section class="relative z-20 overflow-x-hidden bg-[var(--cream-1)] pb-16 pt-24">
   <h2
     id="featured-heading"
     class="mx-auto max-w-[min(100%,34rem)] px-4 text-center text-[clamp(1.25rem,4.2vw,2.25rem)] font-[var(--font-display)] font-bold leading-snug text-[var(--charcoal)] text-balance sm:px-6 md:max-w-[40rem] md:leading-tight transform translate-y-4 scale-95 opacity-0 transition duration-900 ease-out"
@@ -32,7 +32,7 @@ const { lang } = Astro.props;
     <Image
       src={featuredDish}
       alt={lang === "es" ? "Pizza promocional destacada del menú" : "Featured promotional pizza from the menu"}
-      class="mt-35 h-[190px] w-full object-contain md:h-[430px] md:object-cover"
+      class="mt-35 h-[190px] w-full object-contain object-top md:h-[430px] md:object-cover md:object-top"
       widths={[800, 1280, 1920]}
       sizes="100vw"
       loading="lazy"
@@ -48,7 +48,7 @@ const { lang } = Astro.props;
           ? "Fuego prendido masa lista y todos los ingredientes de primera calidad para llevar a tu mesa una pizza de primer nivel."
           : "A glimpse into our kitchen: dough, fire, and conversations by the oven."}
       </p>
-      <div class="mt-6">
+      <div class="mt-6 flex justify-center md:justify-start">
         <a href={`/${lang}/menu`} class="btn-primary whitespace-nowrap">
           {lang === "es" ? "ir al menú" : "Go to menu"}
         </a>
@@ -56,36 +56,35 @@ const { lang } = Astro.props;
     </div>
 
     <div class="min-w-0 md:w-1/2">
-      <div class="relative mx-auto h-[280px] w-full max-w-[420px] sm:h-[320px]">
-        <div class="absolute left-0 top-4 z-10 h-[200px] w-[53%] max-w-[220px] rotate-4 overflow-hidden shadow-nautica-lg">
+      <div class="relative mx-auto h-[280px] w-full max-w-full md:h-[320px] md:w-[520px] md:max-w-none">
+        <!-- Móvil: centro al frente (z-20); desktop: mismo apilado que antes -->
+        <div class="absolute left-2 top-9 z-10 h-[168px] w-[112px] rotate-3 overflow-hidden shadow-nautica-lg sm:left-3 sm:w-[118px] md:left-0 md:top-4 md:z-10 md:h-[200px] md:w-[220px] md:rotate-4">
           <Image
             src={sideImageSecond}
             alt={lang === "es" ? "Pizza con jamón crudo y queso" : "Pizza with prosciutto and cheese"}
             class="h-full w-full object-cover"
             widths={[320, 480]}
-            sizes="220px"
+            sizes="(min-width: 768px) 220px, 118px"
             loading="lazy"
           />
         </div>
-        <div
-          class="absolute right-0 top-0 z-8 h-[200px] w-[53%] max-w-[220px] -rotate-4 overflow-hidden shadow-nautica-lg"
-        >
-           <Image
+        <div class="absolute left-1/2 top-3 z-20 h-[178px] w-[120px] -translate-x-1/2 -rotate-2 overflow-hidden shadow-nautica-lg sm:w-[124px] md:left-[150px] md:top-0 md:z-8 md:h-[200px] md:w-[220px] md:translate-x-0 md:-rotate-4">
+          <Image
             src={sideImageThird}
             alt={lang === "es" ? "Morrones al horno de Pizza Náutica" : "Roasted peppers at Pizza Nautica"}
             class="h-full w-full object-cover"
             widths={[320, 480]}
-            sizes="220px"
+            sizes="(min-width: 768px) 220px, 124px"
             loading="lazy"
           />
         </div>
-        <div class="absolute -right-4 top-8 z-[7] h-[200px] w-[220px] rotate-2 overflow-hidden shadow-nautica-lg">
+        <div class="absolute right-2 top-9 z-10 h-[168px] w-[112px] -rotate-2 overflow-hidden shadow-nautica-lg sm:right-3 sm:w-[118px] md:-right-4 md:top-8 md:z-[7] md:h-[200px] md:w-[220px] md:rotate-2">
           <Image
             src={sideImageFourth}
             alt={lang === "es" ? "Pizza con albahaca y rúcula" : "Pizza with basil and arugula"}
             class="h-full w-full object-cover"
             widths={[320, 480]}
-            sizes="220px"
+            sizes="(min-width: 768px) 220px, 118px"
             loading="lazy"
           />
         </div>

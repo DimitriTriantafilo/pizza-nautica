@@ -1,6 +1,0 @@
-<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="900" fill="#1F1F1F"/>
-  <circle cx="600" cy="450" r="280" fill="#E0D583"/>
-  <circle cx="600" cy="450" r="230" fill="#BD3026"/>
-  <text x="600" y="470" text-anchor="middle" fill="#FFFFFF" font-size="52" font-family="Arial, sans-serif">Pizza Placeholder 1</text>
-</svg>
