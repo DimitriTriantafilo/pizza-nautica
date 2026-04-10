@@ -1,7 +1,13 @@
 ---
 import type { Lang } from "../data/menu";
-import { normalizeWebMenuResponse, WEB_MENU_URL } from "../lib/webmenu";
+import {
+  normalizeWebMenuResponse,
+  WEB_MENU_URL_ORIGIN,
+} from "../lib/webmenu";
 import { useTranslations } from "../i18n/utils";
+import { Image } from "astro:assets";
+import heroBg from "../assets/images/hero/morrones.jpg";
+import velero from "../assets/images/hero/velero.png";
 
 interface Props {
   lang: Lang;
@@ -9,47 +15,45 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const menuPricesUrl = "https://www.pizzanautica.com.ar/qr/";
 
-let loadError: string | null = null;
-let menuCategories = normalizeWebMenuResponse([]);
-
+let buildData: unknown = [];
 try {
-  const res = await fetch(WEB_MENU_URL, {
+  const res = await fetch(WEB_MENU_URL_ORIGIN, {
     headers: { Accept: "application/json" },
   });
-  if (!res.ok) {
-    loadError = `HTTP ${res.status}`;
-  } else {
-    const data: unknown = await res.json();
-    menuCategories = normalizeWebMenuResponse(data);
-    if (menuCategories.length === 0 && !loadError) {
-      loadError = "empty";
-    }
-  }
-} catch (e) {
-  loadError = e instanceof Error ? e.message : "fetch";
+  if (res.ok) buildData = await res.json();
+} catch {
+  /* build-time fetch failed; client will retry */
 }
+
+const buildCategories = normalizeWebMenuResponse(buildData);
 ---
 
-<section class="relative z-20 bg-[var(--charcoal)] py-24 md:py-32">
-  <div
-    class="container-shell-wide flex flex-col items-center text-center"
-  >
-    <p
-      class="w-full max-w-5xl text-xs font-semibold uppercase tracking-[0.3em]
-      text-[var(--nautica-yellow)]"
-    >
+<!-- Hero: static, images optimised at build time -->
+<section
+  class="menu-page-hero relative z-20 overflow-hidden md:min-h-[34rem] md:py-32"
+>
+  <Image
+    src={heroBg}
+    alt=""
+    aria-hidden="true"
+    class="block w-full h-auto md:absolute md:w-[100vw] md:h-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
+    widths={[640, 1280, 1920]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+  />
+  <div class="absolute inset-0 bg-black/60"></div>
+  <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[var(--charcoal)]/90 via-[var(--terracotta)]/10 to-transparent"></div>
+
+  <div class="absolute inset-0 z-10 flex flex-col items-center justify-center px-4 text-center">
+    <p class="w-full max-w-5xl text-xs font-semibold uppercase tracking-[0.3em] text-[var(--nautica-yellow)]">
       {lang === "es" ? "Carta de la casa" : "House menu"}
     </p>
-    <h1
-      class="mt-4 w-full max-w-6xl font-[var(--font-display)] text-[clamp(1.875rem,5vw,3.75rem)] font-bold leading-tight text-balance text-[var(--warm-ivory)] md:text-6xl"
-    >
+    <h1 class="mt-4 w-full max-w-6xl font-[var(--font-display)] text-[clamp(1.875rem,5vw,3.75rem)] font-bold leading-tight text-balance text-[var(--warm-ivory)] md:text-6xl">
       {t("menu.title")}
     </h1>
-    <p
-      class="mt-6 w-full max-w-5xl text-pretty text-base text-[var(--warm-ivory)]/75 sm:text-lg"
-    >
+    <p class="mt-6 w-full max-w-5xl text-pretty text-base text-[var(--warm-ivory)]/80 sm:text-lg">
       {t("menu.subtitle")}
     </p>
     <p class="mt-2 w-full max-w-5xl text-pretty text-sm text-[var(--warm-ivory)]/55">
@@ -58,205 +62,59 @@ try {
   </div>
 </section>
 
-<nav
-  data-menu-rubro-nav
-  class="menu-rubro-nav sticky z-40 border-b border-white/10 bg-[var(--charcoal)]/95 shadow-[0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-md"
-  aria-label={t("menu.rubroNav")}
+<!-- Build-time data embedded as JSON so the client can render instantly -->
+<script
+  id="menu-build-data"
+  type="application/json"
+  set:html={JSON.stringify(buildData)}
+/>
+
+<!-- Client-rendered menu: shows build-time data first, then upgrades with a live fetch -->
+<div
+  id="menu-app"
+  data-lang={lang}
+  data-velero-src={velero.src}
+  data-nav-label={t("menu.rubroNav")}
 >
-  <div class="container-shell-wide py-3">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-      {
-        !loadError && menuCategories.length > 0 && (
-          <ul
-            class="flex min-w-0 flex-1 flex-nowrap items-stretch justify-start gap-2 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-wrap lg:justify-center lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
-          >
-            {menuCategories.map((category, idx) => (
-              <li class="flex shrink-0 snap-start">
-                <a
-                  href={`#${category.id}`}
-                  class="inline-flex max-w-[min(100vw-4rem,14rem)] items-center justify-center rounded-full border border-white/25 px-3 py-2 text-center text-[0.7rem] font-semibold uppercase leading-tight tracking-wide text-[var(--warm-ivory)] transition hover:border-[var(--nautica-yellow)] hover:text-[var(--nautica-yellow)] sm:max-w-none sm:px-4 sm:text-xs"
-                  aria-current={idx === 0 ? "location" : undefined}
-                >
-                  {category.name[lang]}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )
-      }
-      <a
-        href={menuPricesUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex shrink-0 self-center items-center justify-center rounded-full border border-[var(--nautica-yellow)] bg-[var(--nautica-yellow)] px-3 py-2 text-center text-[0.7rem] font-semibold uppercase leading-tight tracking-wide text-[var(--charcoal)] transition hover:border-[var(--warm-ivory)] hover:bg-[var(--warm-ivory)] hover:text-[var(--charcoal)] sm:self-auto sm:px-4 sm:text-xs whitespace-nowrap"
-      >
-        {t("nav.menuWithPrices")}
-      </a>
-    </div>
-  </div>
-</nav>
-
-{
-  loadError && loadError !== "empty" && (
-    <section class="relative z-20 bg-[var(--cream-1)] py-16">
-      <div class="container-shell-wide py-0 text-center">
-        <p class="text-[var(--nautica-red)]" role="alert">
-          {lang === "es"
-            ? "No pudimos cargar el menú en este momento. Probá más tarde."
-            : "We could not load the menu right now. Please try again later."}
-        </p>
-      </div>
-    </section>
-  )
-}
-
-{
-  loadError === "empty" && (
-    <section class="relative z-20 bg-[var(--cream-1)] py-16">
-      <div class="container-shell-wide py-0 text-center">
-        <p class="text-[var(--charcoal)]/70">
-          {lang === "es"
-            ? "El menú no tiene ítems disponibles."
-            : "The menu has no items available."}
-        </p>
-      </div>
-    </section>
-  )
-}
-
-{
-  !loadError &&
-    menuCategories.map((category, categoryIndex) => (
-      <section
-        id={category.id}
-        class:list={[
-          "scroll-mt-[calc(var(--nav-height)+3.5rem)]",
-          "relative z-20 py-16 md:py-20",
-          categoryIndex % 2 === 0
-            ? "bg-[var(--cream-1)]"
-            : "bg-[var(--charcoal)]",
-        ]}
-      >
-        <div class="container-shell-wide">
-          <h2
-            class:list={[
-              "mx-auto max-w-[min(100%,40rem)] text-center text-balance",
-              "font-[var(--font-display)] text-[clamp(1.75rem,4vw,3rem)] font-bold",
-              "leading-tight md:text-5xl",
-              categoryIndex % 2 === 0
-                ? "text-[var(--charcoal)]"
-                : "text-[var(--warm-ivory)]",
-            ]}
-          >
-            {category.name[lang]}
-          </h2>
-
-          <div class="mx-auto mt-6 flex w-full max-w-xl items-center gap-3">
-            <span
-              class:list={[
-                "h-px flex-1",
-                categoryIndex % 2 === 0
-                  ? "bg-[var(--charcoal)]/20"
-                  : "bg-[var(--warm-ivory)]/30",
-              ]}
-            />
-            <span
-              class:list={[
-                "h-2 w-2 rounded-full",
-                categoryIndex % 2 === 0
-                  ? "bg-[var(--nautica-red)]"
-                  : "bg-[var(--nautica-yellow)]",
-              ]}
-            />
-            <span
-              class:list={[
-                "h-px flex-1",
-                categoryIndex % 2 === 0
-                  ? "bg-[var(--charcoal)]/20"
-                  : "bg-[var(--warm-ivory)]/30",
-              ]}
-            />
-          </div>
-
-          <div class="mt-12 flex flex-col gap-10">
-            {category.subCategories.map((subCategory) => (
-              <article class="min-w-0 w-full">
-                {!subCategory.hideHeading &&
-                  (subCategory.name.es.trim() !== "" ||
-                    subCategory.name.en.trim() !== "") && (
-                    <h3
-                      class:list={[
-                        "text-sm font-semibold uppercase tracking-[0.25em]",
-                        categoryIndex % 2 === 0
-                          ? "text-[var(--nautica-red)]"
-                          : "text-[var(--nautica-yellow)]",
-                      ]}
-                    >
-                      {subCategory.name[lang]}
-                    </h3>
-                  )}
-
-                <ul
-                  class:list={[
-                    "grid grid-cols-1 gap-0 md:grid-cols-2 md:gap-x-10 md:gap-y-0",
-                    !subCategory.hideHeading &&
-                    (subCategory.name.es.trim() !== "" ||
-                      subCategory.name.en.trim() !== "")
-                      ? "mt-5"
-                      : "mt-0",
-                  ]}
-                  role="list"
-                >
-                  {subCategory.dishes[lang].map((dish) => (
-                    <li
-                      class:list={[
-                        "border-b py-3 last:border-b-0",
-                        categoryIndex % 2 === 0
-                          ? "border-[var(--charcoal)]/15"
-                          : "border-[var(--warm-ivory)]/20",
-                      ]}
-                    >
-                      <span
-                        class:list={[
-                          "block text-base font-medium md:text-lg",
-                          "text-pretty",
-                          categoryIndex % 2 === 0
-                            ? "text-[var(--charcoal)]"
-                            : "text-[var(--warm-ivory)]",
-                        ]}
-                      >
-                        {dish.name}
-                      </span>
-                      {dish.detail && (
-                        <span
-                          class:list={[
-                            "mt-1 block text-sm leading-relaxed md:text-base",
-                            "text-pretty",
-                            categoryIndex % 2 === 0
-                              ? "text-[var(--charcoal)]/65"
-                              : "text-[var(--warm-ivory)]/65",
-                          ]}
-                        >
-                          {dish.detail}
-                        </span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
+  <!-- Loading skeleton (only visible if build-time data was empty) -->
+  {
+    buildCategories.length === 0 && (
+      <section class="relative z-20 bg-[var(--cream-1)] py-16">
+        <div class="container-shell-wide py-0 text-center">
+          <div class="animate-pulse space-y-4">
+            <div class="mx-auto h-6 w-48 rounded bg-[var(--ink-maroon)]/15" />
+            <div class="mx-auto h-4 w-64 rounded bg-[var(--ink-maroon)]/10" />
+            <div class="mx-auto h-4 w-56 rounded bg-[var(--ink-maroon)]/10" />
           </div>
         </div>
       </section>
-    ))
-}
+    )
+  }
+</div>
 
 <script>
+  import type { Lang } from "../data/menu";
+  import { normalizeWebMenuResponse, getWebMenuURL } from "../lib/webmenu";
+  import { renderMenuHTML } from "../lib/menu-renderer";
+
+  const MESSAGES: Record<Lang, { error: string; empty: string }> = {
+    es: {
+      error: "No pudimos cargar el menú en este momento. Probá más tarde.",
+      empty: "El menú no tiene ítems disponibles.",
+    },
+    en: {
+      error: "We could not load the menu right now. Please try again later.",
+      empty: "The menu has no items available.",
+    },
+  };
+
   function initMenuRubroNav() {
     const nav = document.querySelector("[data-menu-rubro-nav]");
     if (!nav || !("IntersectionObserver" in window)) return;
 
-    const links = [...nav.querySelectorAll('a[href^="#"]')];
+    const links = [
+      ...nav.querySelectorAll('a[href^="#"]'),
+    ] as HTMLAnchorElement[];
     if (links.length === 0) return;
 
     const sections = links
@@ -264,9 +122,9 @@ try {
         const id = a.getAttribute("href")?.slice(1);
         return id ? document.getElementById(id) : null;
       })
-      .filter((el) => el !== null);
+      .filter((el): el is HTMLElement => el !== null);
 
-    function setActive(id) {
+    function setActive(id: string) {
       links.forEach((link) => {
         const href = link.getAttribute("href")?.slice(1);
         if (href === id) {
@@ -289,7 +147,7 @@ try {
         root: null,
         rootMargin: "-18% 0px -52% 0px",
         threshold: [0, 0.06, 0.12, 0.2],
-      }
+      },
     );
 
     sections.forEach((s) => observer.observe(s));
@@ -300,6 +158,70 @@ try {
     }
   }
 
-  initMenuRubroNav();
-  document.addEventListener("astro:after-swap", initMenuRubroNav);
+  function render(
+    root: HTMLElement,
+    data: unknown,
+    lang: Lang,
+    veleroSrc: string,
+    navLabel: string,
+  ): boolean {
+    const msg = MESSAGES[lang];
+    const categories = normalizeWebMenuResponse(data);
+
+    if (categories.length === 0) {
+      root.innerHTML = `
+        <section class="relative z-20 bg-[var(--cream-1)] py-16">
+          <div class="container-shell-wide py-0 text-center">
+            <p class="text-[var(--charcoal)]/70">${msg.empty}</p>
+          </div>
+        </section>`;
+      return false;
+    }
+
+    root.innerHTML = renderMenuHTML(categories, lang, veleroSrc, navLabel);
+    initMenuRubroNav();
+    return true;
+  }
+
+  async function initMenu() {
+    const root = document.getElementById("menu-app");
+    if (!root) return;
+
+    const lang = (root.dataset.lang || "es") as Lang;
+    const veleroSrc = root.dataset.veleroSrc || "";
+    const navLabel = root.dataset.navLabel || "";
+    const msg = MESSAGES[lang];
+
+    const buildEl = document.getElementById("menu-build-data");
+    let hasBuildData = false;
+
+    if (buildEl?.textContent) {
+      try {
+        const buildJSON = JSON.parse(buildEl.textContent);
+        hasBuildData = render(root, buildJSON, lang, veleroSrc, navLabel);
+      } catch {
+        /* malformed build data – will fetch live */
+      }
+    }
+
+    try {
+      const res = await fetch(getWebMenuURL(), {
+        headers: { Accept: "application/json" },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      render(root, await res.json(), lang, veleroSrc, navLabel);
+    } catch {
+      if (!hasBuildData) {
+        root.innerHTML = `
+          <section class="relative z-20 bg-[var(--cream-1)] py-16">
+            <div class="container-shell-wide py-0 text-center">
+              <p class="text-[var(--nautica-red)]" role="alert">${msg.error}</p>
+            </div>
+          </section>`;
+      }
+    }
+  }
+
+  initMenu();
+  document.addEventListener("astro:after-swap", initMenu);
 </script>

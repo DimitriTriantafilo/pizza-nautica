@@ -1,7 +1,7 @@
 ---
 import LanguageToggle from "./LanguageToggle.astro";
 import { useTranslations } from "../i18n/utils";
-import whiteLogo from "../assets/images/logo/white-logo.png";
+import brandLogo from "../assets/images/logo/original-logo.png";
 import { Image } from "astro:assets";
 
 interface Props {
@@ -14,11 +14,10 @@ const t = useTranslations(lang);
 const homePath = `/${lang}/`;
 const historyPath = `/${lang}/historia`;
 const menuPath = `/${lang}/menu`;
-const bookingsUrl = "https://www.pizzanautica.com.ar/qr/turnos";
 const isActive = (path: string) => currentPath === path || (path.endsWith("/") && currentPath === path.slice(0, -1));
 ---
 
-<header id="site-header" class="site-header fixed top-0 z-50 w-full border-b border-transparent bg-transparent">
+<header id="site-header" class="site-header fixed top-0 z-50 w-full bg-transparent">
   <nav class="site-nav container-shell flex flex-row md:flex-row-reverse items-center justify-between gap-3 text-[var(--warm-ivory)]">
     <button
       id="mobile-menu-toggle"
@@ -37,11 +36,11 @@ const isActive = (path: string) => currentPath === path || (path.endsWith("/") &
 
     <a class="order-2 flex items-center gap-2 text-sm font-semibold md:order-1" href={homePath}>
       <Image
-        src={whiteLogo}
+        src={brandLogo}
         alt="Pizza Nautica"
-        width={40}
-        height={40}
-        class="h-auto w-8 object-contain md:w-10"
+        width={591}
+        height={591}
+        class="h-auto w-9 object-contain md:w-11"
       />
       <span class="text-[var(--warm-ivory)]">{t("site.name")}</span>
     </a>
@@ -57,15 +56,6 @@ const isActive = (path: string) => currentPath === path || (path.endsWith("/") &
         {t("nav.home")}
       </a>
       <a
-        href={historyPath}
-        class:list={[
-          "transition-premium hover:text-[var(--nautica-yellow)]",
-          isActive(historyPath) && "text-[var(--nautica-red)]",
-        ]}
-      >
-        {t("nav.history")}
-      </a>
-      <a
         href={menuPath}
         class:list={[
           "transition-premium hover:text-[var(--nautica-yellow)]",
@@ -74,6 +64,15 @@ const isActive = (path: string) => currentPath === path || (path.endsWith("/") &
       >
         {t("nav.menu")}
       </a>
+      <a
+        href={historyPath}
+        class:list={[
+          "transition-premium hover:text-[var(--nautica-yellow)]",
+          isActive(historyPath) && "text-[var(--nautica-red)]",
+        ]}
+      >
+        {t("nav.history")}
+      </a>
       <LanguageToggle lang={lang} currentPath={currentPath} />
     </div>
   </nav>
@@ -81,17 +80,8 @@ const isActive = (path: string) => currentPath === path || (path.endsWith("/") &
   <div id="mobile-menu-panel" class="hidden border-t border-white/10 bg-[var(--charcoal)] text-[var(--warm-ivory)] md:hidden">
     <div class="container-shell flex flex-col gap-4 py-4 text-sm">
       <a data-mobile-link href={homePath} class="transition-premium hover:text-[var(--nautica-yellow)]">{t("nav.home")}</a>
-      <a data-mobile-link href={historyPath} class="transition-premium hover:text-[var(--nautica-yellow)]">{t("nav.history")}</a>
       <a data-mobile-link href={menuPath} class="transition-premium hover:text-[var(--nautica-yellow)]">{t("nav.menu")}</a>
-      <a
-        data-mobile-link
-        href={bookingsUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="transition-premium hover:text-[var(--nautica-yellow)]"
-      >
-        {t("nav.bookings")}
-      </a>
+      <a data-mobile-link href={historyPath} class="transition-premium hover:text-[var(--nautica-yellow)]">{t("nav.history")}</a>
       <div class="flex justify-start">
         <LanguageToggle lang={lang} currentPath={currentPath} />
       </div>

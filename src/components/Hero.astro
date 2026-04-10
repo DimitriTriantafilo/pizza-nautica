@@ -1,8 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { useTranslations } from "../i18n/utils";
-import heroImage from "../assets/images/hero/hero-placeholder.jpg";
-import whiteLogo from "../assets/images/logo/white-logo.png";
+import heroImage from "../assets/images/hero/FRENTE APAISADO P NAUTICA.jpg";
 
 interface Props {
   lang: "es" | "en";
@@ -10,13 +9,18 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+
+const siteName = lang === "es" ? "Pizza Náutica" : "Pizza Nautica";
+const letters = siteName.split("");
+// Last letter animation ends at: (letters.length - 1) * 0.03 + 0.6s
+const subtitleDelay = ((letters.length - 1) * 0.03 + 0.65).toFixed(2);
 ---
 
-<section class="relative min-h-screen overflow-hidden">
+<section class="hero-section relative min-h-screen overflow-hidden">
   <Image
     src={heroImage}
     alt={t("site.name")}
-    class="fixed inset-0 h-screen w-full object-cover"
+    class="absolute inset-0 h-full w-full object-cover object-center"
     widths={[640, 1280, 1920]}
     sizes="100vw"
     loading="eager"
@@ -24,38 +28,91 @@ const t = useTranslations(lang);
     decoding="async"
     priority
   />
-  <div class="fixed inset-0 bg-black/50"></div>
 
-  <!-- Brand mark: top-left of viewport (not aligned with title block below). -->
-  <div
-    class="pointer-events-none absolute left-0 top-0 z-10
-      pl-[max(0.5rem,env(safe-area-inset-left))]
-      pt-[max(4.5rem,calc(env(safe-area-inset-top)+3.75rem))]
-      md:pl-16 md:pt-28 lg:pl-[150px]"
-  >
-    <Image
-      src={whiteLogo}
-      alt="Pizza Nautica"
-      width={140}
-      height={140}
-      class="pointer-events-auto h-auto w-[5.25rem] object-contain sm:w-24 md:w-[6.75rem]"
-    />
-  </div>
+  <!-- Warm-toned glass overlay for legibility -->
+  <div class="absolute inset-0 bg-[var(--glass-overlay)]"></div>
 
+  <!-- Cinematic base gradient: charcoal fade at bottom with warm terracotta mid-tone -->
   <div
-    class="container-shell relative z-10 flex min-h-screen flex-col justify-end pb-12 pt-24 text-left md:pb-16 md:pt-28"
+    class="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t
+      from-[var(--charcoal)]/85 via-[var(--terracotta)]/15 to-transparent"
+  ></div>
+
+  <!-- Hero content: centered -->
+  <div
+    class="relative z-10 flex min-h-screen flex-col items-center justify-center
+      px-4 text-center"
   >
-    <div class="min-w-0 max-w-full pr-[env(safe-area-inset-right)]">
-      <h1
-        class="font-[var(--font-display)] text-[clamp(1.75rem,6vw,4rem)] font-bold leading-[1.08] tracking-widest text-white"
-      >
-        Pizza Nautica
-      </h1>
-      <p
-        class="mt-2 max-w-[min(100%,30rem)] font-[var(--font-body)] text-xs font-medium uppercase leading-snug tracking-[0.12em] text-white/85 text-pretty sm:text-sm sm:tracking-[0.14em] md:max-w-2xl md:text-base"
-      >
-        {t("site.lema")}
-      </p>
-    </div>
+    <h1
+      aria-label={siteName}
+      class="font-[var(--font-display)] font-bold leading-none
+        text-[clamp(2.5rem,8vw,5rem)] text-[var(--warm-ivory)]
+        tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]"
+    >
+      {letters.map((letter, i) => (
+        <span
+          class="hero-letter inline-block"
+          style={`animation-delay:${(i * 0.03).toFixed(2)}s`}
+          aria-hidden="true"
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </span>
+      ))}
+    </h1>
+
+    <p
+      class="hero-subtitle mt-6 font-[var(--font-body)] font-semibold uppercase
+        tracking-[0.28em] text-[var(--warm-ivory)]/80
+        text-xs sm:text-sm md:text-base
+        drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]"
+      style={`animation-delay:${subtitleDelay}s`}
+    >
+      {t("site.lema")}
+    </p>
   </div>
 </section>
+
+<style>
+  @keyframes letterReveal {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes blockFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-letter {
+    opacity: 0;
+    will-change: transform, opacity;
+    animation: letterReveal 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  }
+
+  .hero-subtitle {
+    opacity: 0;
+    will-change: transform, opacity;
+    animation: blockFadeIn 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-letter,
+    .hero-subtitle {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

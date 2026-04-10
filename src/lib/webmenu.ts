@@ -90,5 +90,9 @@ export function normalizeWebMenuResponse(data: unknown): MenuCategory[] {
     .filter((c): c is MenuCategory => c !== null);
 }
 
-export const WEB_MENU_URL =
+export const WEB_MENU_URL_ORIGIN =
   "https://www.ace-data.com.ar/capitel/DAOs/getwebmenu.php" as const;
+
+export function getWebMenuURL(): string {
+  return WEB_MENU_URL_ORIGIN;
+}

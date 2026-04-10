@@ -9,13 +9,11 @@ export const ui = {
   es: {
     "site.name": "Pizza Náutica",
     "site.tagline": "Sabor tradicional junto al río.",
-    "site.lema": "30 años en el corazon de san fernando",
+    "site.lema": "30 años en el corazón de San Fernando",
 
     "nav.home": "Inicio",
     "nav.history": "Historia",
     "nav.menu": "Menú",
-    "nav.menuWithPrices": "Menú con precios",
-    "nav.bookings": "Reservas",
     "hero.ctaHistory": "Ver nuestra historia",
     "home.glimpse.title": "Un vistazo",
     "home.glimpse.text":
@@ -32,7 +30,6 @@ export const ui = {
     "menu.note":
       "Carta actualizada desde nuestro sistema; nombre y descripción de cada plato.",
     "menu.rubroNav": "Ir a un rubro de la carta",
-    "menu.cta": "Ver Menú con Precios",
     "menu.classic": "Clásicas",
     "menu.special": "Especiales",
     "menu.drinks": "Bebidas",
@@ -59,8 +56,6 @@ export const ui = {
     "nav.home": "Home",
     "nav.history": "History",
     "nav.menu": "Menu",
-    "nav.menuWithPrices": "Menu with prices",
-    "nav.bookings": "Reservations",
     "hero.ctaHistory": "View our story",
     "home.glimpse.title": "A quick look",
     "home.glimpse.text":
@@ -77,7 +72,6 @@ export const ui = {
     "menu.note":
       "Menu is synced from our system; names and descriptions follow the house menu.",
     "menu.rubroNav": "Jump to a menu category",
-    "menu.cta": "View Menu with Prices",
     "menu.classic": "Classics",
     "menu.special": "Specials",
     "menu.drinks": "Drinks",

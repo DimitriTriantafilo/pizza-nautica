@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { useTranslations } from "../i18n/utils";
-import tripadvisorLogo from "../assets/images/hero/tripadvisor-logo-vector-01.png";
+import brandLogo from "../assets/images/logo/white-logo.png";
 
 interface Props {
   lang: "es" | "en";
@@ -17,147 +17,111 @@ const historyPath = `/${lang}/historia`;
 const instagramUrl = "https://www.instagram.com/pizzanautica/";
 const facebookUrl = "https://www.facebook.com/PizzaNautica";
 const whatsappUrl = "https://wa.me/541147255050";
-const tripadvisorUrl =
-  "https://www.tripadvisor.com.ar/Restaurant_Review-g1450244-d8490695-Reviews-Pizza_Nautica-San_Fernando_Province_of_Buenos_Aires_Central_Argentina.html";
+
+const navLinks = [
+  { href: homePath, label: t("nav.home") },
+  { href: menuPath, label: t("nav.menu") },
+  { href: historyPath, label: t("nav.history") },
+];
+
+const socialLinks = [
+  {
+    href: instagramUrl,
+    label: "Instagram",
+    path: "M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.8A3.95 3.95 0 0 0 3.8 7.75v8.5a3.95 3.95 0 0 0 3.95 3.95h8.5a3.95 3.95 0 0 0 3.95-3.95v-8.5a3.95 3.95 0 0 0-3.95-3.95h-8.5Zm8.94 1.35a1.16 1.16 0 1 1 0 2.32 1.16 1.16 0 0 1 0-2.32ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Z",
+  },
+  {
+    href: facebookUrl,
+    label: "Facebook",
+    path: "M13.5 22v-8.2h2.76l.42-3.2H13.5V8.57c0-.93.26-1.56 1.6-1.56h1.7V4.15a22.3 22.3 0 0 0-2.48-.13c-2.45 0-4.13 1.5-4.13 4.24v2.36H7.42v3.2h2.77V22h3.31Z",
+  },
+  {
+    href: whatsappUrl,
+    label: "WhatsApp",
+    path: "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z",
+  },
+];
 ---
 
-<footer class="relative z-20 bg-[var(--charcoal)] overflow-hidden">
-  <div class="container-shell px-6 pt-16 pb-10">
-    <div class="grid gap-12 md:grid-cols-3">
+<footer class="relative z-20 overflow-hidden bg-[var(--charcoal)]">
+  <div class="container-shell px-6 pb-10 pt-16">
+    <div class="grid grid-cols-1 gap-16 text-center md:grid-cols-3 md:gap-20 md:text-left">
 
-      <nav aria-label={lang === "es" ? "Navegación" : "Navigation"}>
+      <!-- Col 1: Nav links -->
+      <nav
+        aria-label={lang === "es" ? "Navegación" : "Navigation"}
+        class="flex flex-col items-center justify-center md:items-start"
+      >
         <ul class="space-y-4">
-          <li>
-            <a
-              href={homePath}
-              class="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--warm-ivory)] transition-premium hover:text-[var(--nautica-yellow)]"
-            >
-              {t("nav.home")}
-            </a>
-          </li>
-          <li>
-            <a
-              href={menuPath}
-              class="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--warm-ivory)] transition-premium hover:text-[var(--nautica-yellow)]"
-            >
-              {t("nav.menu")}
-            </a>
-          </li>
-          <li>
-            <a
-              href={historyPath}
-              class="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--warm-ivory)] transition-premium hover:text-[var(--nautica-yellow)]"
-            >
-              {t("nav.history")}
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--warm-ivory)] transition-premium hover:text-[var(--nautica-yellow)]"
-            >
-              {t("nav.bookings")}
-            </a>
-          </li>
+          {navLinks.map(({ href, label }) => (
+            <li>
+              <a
+                href={href}
+                class="text-sm font-semibold uppercase tracking-widest
+                  text-[var(--warm-ivory)] transition-premium
+                  hover:text-[var(--nautica-yellow)]"
+              >
+                {label}
+              </a>
+            </li>
+          ))}
         </ul>
       </nav>
 
-      <div>
-        <p class="font-[var(--font-display)] text-xl font-bold uppercase tracking-wide text-[var(--warm-ivory)]">
-          {t("site.name")}
-        </p>
-        <p class="mt-4 text-sm leading-relaxed text-[var(--warm-ivory)]/70">
+      <!-- Col 2: Contact + socials -->
+      <div class="flex flex-col items-center md:items-center">
+        <p class="text-sm leading-relaxed text-[var(--warm-ivory)]/70">
           {t("location.address")}
         </p>
         <a
           href="tel:+541147255050"
-          class="mt-1 inline-block text-sm text-[var(--warm-ivory)]/70 transition-premium hover:text-[var(--nautica-yellow)]"
+          class="mt-1 text-sm text-[var(--warm-ivory)]/70
+            transition-premium hover:text-[var(--nautica-yellow)]"
         >
           +54 11 4725-5050
         </a>
 
-        <div class="mt-6 flex items-center gap-3">
-          <a
-            href={instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--warm-ivory)]/25 text-[var(--warm-ivory)] transition-premium hover:border-[var(--nautica-yellow)] hover:text-[var(--nautica-yellow)]"
-          >
-            <svg viewBox="0 0 24 24" class="h-[18px] w-[18px] fill-current" aria-hidden="true">
-              <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.8A3.95 3.95 0 0 0 3.8 7.75v8.5a3.95 3.95 0 0 0 3.95 3.95h8.5a3.95 3.95 0 0 0 3.95-3.95v-8.5a3.95 3.95 0 0 0-3.95-3.95h-8.5Zm8.94 1.35a1.16 1.16 0 1 1 0 2.32 1.16 1.16 0 0 1 0-2.32ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Z" />
-            </svg>
-          </a>
-
-          <a
-            href={facebookUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-            class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--warm-ivory)]/25 text-[var(--warm-ivory)] transition-premium hover:border-[var(--nautica-yellow)] hover:text-[var(--nautica-yellow)]"
-          >
-            <svg viewBox="0 0 24 24" class="h-[18px] w-[18px] fill-current" aria-hidden="true">
-              <path d="M13.5 22v-8.2h2.76l.42-3.2H13.5V8.57c0-.93.26-1.56 1.6-1.56h1.7V4.15a22.3 22.3 0 0 0-2.48-.13c-2.45 0-4.13 1.5-4.13 4.24v2.36H7.42v3.2h2.77V22h3.31Z" />
-            </svg>
-          </a>
-
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="WhatsApp"
-            class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--warm-ivory)]/25 text-[var(--warm-ivory)] transition-premium hover:border-[var(--nautica-yellow)] hover:text-[var(--nautica-yellow)]"
-          >
-            <svg viewBox="0 0 24 24" class="h-[18px] w-[18px] fill-current" aria-hidden="true">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
-            </svg>
-          </a>
+        <div class="mt-6 flex items-center gap-4">
+          {socialLinks.map(({ href, label, path }) => (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              class="flex h-10 w-10 items-center justify-center rounded-full
+                border border-[var(--warm-ivory)]/25 text-[var(--warm-ivory)]
+                transition-premium hover:border-[var(--nautica-yellow)]
+                hover:text-[var(--nautica-yellow)]"
+            >
+              <svg viewBox="0 0 24 24" class="h-[18px] w-[18px] fill-current" aria-hidden="true">
+                <path d={path} />
+              </svg>
+            </a>
+          ))}
         </div>
       </div>
 
-      <a
-        href={tripadvisorUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="flex flex-col justify-center rounded-xl border border-[var(--warm-ivory)]/10 bg-white/[0.04] p-5 transition-premium hover:border-[var(--warm-ivory)]/25 hover:bg-white/[0.07]"
-        aria-label={lang === "es" ? "Ver perfil en TripAdvisor" : "See profile on TripAdvisor"}
-      >
-        <p class="text-xs font-semibold uppercase tracking-widest text-[var(--warm-ivory)]/50">
-          TripAdvisor
-        </p>
-        <div class="mt-3 flex items-center gap-3">
-          <Image
-            src={tripadvisorLogo}
-            alt="TripAdvisor"
-            class="h-7 w-auto object-contain brightness-0 invert"
-            widths={[176]}
-            sizes="176px"
-            loading="lazy"
-          />
-          <p class="text-lg font-bold text-[var(--warm-ivory)]">4.0 / 5</p>
-        </div>
-
-        <div class="mt-3 flex items-center gap-1.5" aria-hidden="true">
-          <span class="h-3 w-3 rounded-full bg-[var(--nautica-red)]"></span>
-          <span class="h-3 w-3 rounded-full bg-[var(--nautica-red)]"></span>
-          <span class="h-3 w-3 rounded-full bg-[var(--nautica-red)]"></span>
-          <span class="h-3 w-3 rounded-full bg-[var(--nautica-red)]"></span>
-          <span class="h-3 w-3 rounded-full border border-[var(--nautica-red)]/50 bg-transparent"></span>
-        </div>
-
-        <p class="mt-3 text-xs text-[var(--nautica-yellow)] opacity-70 transition-premium group-hover:opacity-100">
-          {lang === "es" ? "Ver en TripAdvisor →" : "See on TripAdvisor →"}
-        </p>
-      </a>
+      <!-- Col 3: Brand logo -->
+      <div class="flex flex-col items-center md:items-end">
+        <Image
+          src={brandLogo}
+          alt={t("site.name")}
+          width={790}
+          height={790}
+          class="h-auto w-28 object-contain opacity-[0.4]"
+          loading="lazy"
+        />
+      </div>
     </div>
 
-    <div class="mt-10 border-t border-[var(--warm-ivory)]/15 pt-6 text-xs text-[var(--warm-ivory)]/40">
+    <div class="mt-10 border-t border-white/5 pt-6 text-center text-xs text-[var(--warm-ivory)]/40">
       &copy; {new Date().getFullYear()} {t("site.name")}. {t("footer.copy")}
     </div>
   </div>
 
-  <div class="h-[8vw] select-none" aria-hidden="true">
-    <p class="whitespace-nowrap text-center font-[var(--font-body)] text-[12vw] font-black uppercase leading-none tracking-tight text-white/[0.08]">
+  <!-- Ghost watermark text -->
+  <div class="h-[8vw] select-none overflow-hidden" aria-hidden="true">
+    <p class="whitespace-nowrap text-center font-[var(--font-body)] text-[12vw] font-black uppercase leading-none tracking-tight text-white/[0.06]">
       Pizza Náutica
     </p>
   </div>
